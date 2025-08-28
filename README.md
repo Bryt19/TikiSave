@@ -231,6 +231,6 @@ This project is provided as-is for educational and personal use. Please ensure c
 
 ---
 
-**Last Updated**: December 2024  
+**Last Updated**: August 2025  
 **Version**: 1.0.0  
 **Browser Support**: Modern browsers with ES6+ support
