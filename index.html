@@ -564,6 +564,64 @@
         border-left: 4px solid var(--success-color);
       }
 
+      .warning {
+        background: #fff3e0;
+        color: #ef6c00;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-left: 4px solid var(--warning-color);
+      }
+
+      /* Mobile download status */
+      .mobile-status {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--card-bg);
+        border: 2px solid var(--primary-color);
+        border-radius: 25px;
+        padding: 12px 20px;
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        display: none;
+        animation: slideUp 0.3s ease-out;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateX(-50%) translateY(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(-50%) translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .mobile-status.show {
+        display: block;
+      }
+
+      .mobile-status.success {
+        border-color: var(--success-color);
+        background: var(--success-color);
+        color: white;
+      }
+
+      .mobile-status.error {
+        border-color: var(--danger-color);
+        background: var(--danger-color);
+        color: white;
+      }
+
+      .mobile-status.info {
+        border-color: var(--primary-color);
+        background: var(--primary-color);
+        color: white;
+      }
+
       @media (max-width: 768px) {
         .container {
           padding: 20px;
@@ -588,6 +646,38 @@
           width: 40px;
           height: 40px;
           font-size: 16px;
+        }
+
+        /* Mobile-specific button improvements */
+        .btn {
+          padding: 18px 25px;
+          font-size: 16px;
+          min-height: 44px; /* iOS minimum touch target size */
+        }
+
+        .download-option .btn {
+          width: 100%;
+          margin: 10px 0;
+        }
+
+        .history-item .download-buttons .btn {
+          min-height: 44px;
+          padding: 12px 20px;
+        }
+
+        /* Mobile modal improvements */
+        .modal-content {
+          width: 95%;
+          max-height: 95vh;
+          margin: 10px;
+        }
+
+        .modal-body {
+          padding: 20px;
+        }
+
+        .modal-footer {
+          padding: 15px 20px;
         }
       }
 
@@ -729,6 +819,31 @@
           <button class="btn btn-danger" id="confirmActionBtn">Confirm</button>
         </div>
       </div>
+    </div>
+
+    <!-- Mobile Download Help Modal -->
+    <div id="mobileHelpModal" class="modal-overlay" style="display: none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-mobile-alt"></i> Mobile Download Help</h3>
+        </div>
+        <div class="modal-body">
+          <div id="mobileHelpContent">
+            <!-- Content will be populated based on device -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" onclick="hideMobileHelpModal()">
+            Got it!
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Download Status Bar -->
+    <div id="mobileStatus" class="mobile-status">
+      <i class="fas fa-download"></i>
+      <span id="mobileStatusText">Downloading...</span>
     </div>
 
     <div class="container">
@@ -1008,6 +1123,212 @@
         }
       }
 
+      // Check if device is mobile
+      function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+      }
+
+      // Check if device is iOS
+      function isIOSDevice() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent);
+      }
+
+      // Download file function that works on both desktop and mobile
+      async function downloadFile(url, filename, type, event) {
+        try {
+          // Show loading state
+          const button = event.target.closest("button");
+          const originalText = button.innerHTML;
+          button.innerHTML = '<div class="loading"></div> Downloading...';
+          button.disabled = true;
+
+          // Show mobile-specific message for first-time users
+          if (
+            isMobileDevice() &&
+            !localStorage.getItem("mobileDownloadShown")
+          ) {
+            setTimeout(() => {
+              showMessage(
+                `📱 Mobile detected! Tap the help button for download instructions.`,
+                "warning"
+              );
+              localStorage.setItem("mobileDownloadShown", "true");
+            }, 1000);
+          }
+
+          // For mobile devices, we need to handle downloads differently
+          if (isMobileDevice()) {
+            // Mobile device - use fetch and create blob URL
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            // Show download progress for mobile users
+            if (isMobileDevice()) {
+              button.innerHTML = '<div class="loading"></div> Processing...';
+              showMobileStatus("Processing video/audio...", "info");
+            }
+
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            // For iOS devices, we need to handle downloads differently
+            if (isIOSDevice()) {
+              // iOS - open in new tab and let user save manually
+              const newTab = window.open(blobUrl, "_blank");
+              if (newTab) {
+                showMessage(
+                  `${
+                    type === "video" ? "Video" : "Audio"
+                  } opened in new tab. Long press to save on iOS.`,
+                  "success"
+                );
+
+                // Add mobile success animation
+                if (isMobileDevice()) {
+                  button.style.background = "var(--success-color)";
+                  button.innerHTML = '<i class="fas fa-check"></i> Success!';
+                  showMobileStatus(
+                    "Video opened! Long press to save.",
+                    "success"
+                  );
+                  setTimeout(() => {
+                    button.style.background = "";
+                  }, 2000);
+                }
+
+                // Show iOS-specific instructions
+                setTimeout(() => {
+                  showMessage(
+                    `💡 Tip: Long press the video/audio in the new tab and select "Save to Files" or "Save to Photos"`,
+                    "warning"
+                  );
+                }, 2000);
+              } else {
+                // Fallback for blocked popups
+                showMessage(
+                  `Please allow popups and try again, or long press the download button to save.`,
+                  "warning"
+                );
+
+                // Alternative approach for iOS - try to trigger download directly
+                try {
+                  const link = document.createElement("a");
+                  link.href = blobUrl;
+                  link.download = filename;
+                  link.style.display = "none";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  showMessage(
+                    `Alternative download method attempted. Check your Downloads folder.`,
+                    "success"
+                  );
+                } catch (fallbackError) {
+                  console.error("Fallback download failed:", fallbackError);
+                }
+              }
+            } else {
+              // Android and other mobile devices
+              const link = document.createElement("a");
+              link.href = blobUrl;
+              link.download = filename;
+              link.style.display = "none";
+
+              // Append to body, click, and cleanup
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+
+              showMessage(
+                `${type === "video" ? "Video" : "Audio"} download started!`,
+                "success"
+              );
+
+              // Add mobile success animation
+              if (isMobileDevice()) {
+                button.style.background = "var(--success-color)";
+                button.innerHTML = '<i class="fas fa-check"></i> Success!';
+                showMobileStatus(
+                  "Download started! Check your Downloads folder.",
+                  "success"
+                );
+                setTimeout(() => {
+                  button.style.background = "";
+                }, 2000);
+              }
+            }
+
+            // Clean up the blob URL
+            setTimeout(() => {
+              window.URL.revokeObjectURL(blobUrl);
+            }, 1000);
+          } else {
+            // Desktop device - use traditional download
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            link.style.display = "none";
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showMessage(
+              `${type === "video" ? "Video" : "Audio"} download started!`,
+              "success"
+            );
+
+            // Add success animation for desktop
+            button.style.background = "var(--success-color)";
+            button.innerHTML = '<i class="fas fa-check"></i> Success!';
+            if (isMobileDevice()) {
+              showMobileStatus("Download started!", "success");
+            }
+            setTimeout(() => {
+              button.style.background = "";
+            }, 2000);
+          }
+        } catch (error) {
+          console.error("Download error:", error);
+
+          // Mobile-specific error messages
+          if (isMobileDevice()) {
+            if (error.message.includes("Network response was not ok")) {
+              showMessage(
+                `Network error. Please check your internet connection and try again.`,
+                "error"
+              );
+              showMobileStatus("Network error!", "error");
+            } else if (isIOSDevice()) {
+              showMessage(
+                `iOS download failed. Try the help button for alternative methods.`,
+                "error"
+              );
+              showMobileStatus("iOS download failed!", "error");
+            } else {
+              showMessage(
+                `Mobile download failed. Please try again or check your device settings.`,
+                "error"
+              );
+              showMobileStatus("Download failed!", "error");
+            }
+          } else {
+            showMessage(
+              `Failed to download ${type}. Please try again.`,
+              "error"
+            );
+          }
+        } finally {
+          // Restore button state
+          if (button) {
+            button.innerHTML = originalText;
+            button.disabled = false;
+          }
+        }
+      }
+
       // Main functionality
       const btn = document.getElementById("downloadBtn");
       const input = document.getElementById("tiktokLink");
@@ -1212,17 +1533,28 @@
                 <div class="download-options">
                   <div class="download-option">
                     <h4><i class="fas fa-video"></i> Video Download</h4>
-                    <a href="${videoURL}" download="tiktok-video.mp4" class="btn btn-primary">
+                    <button onclick="downloadFile('${videoURL}', 'tiktok-video.mp4', 'video', event)" class="btn btn-primary">
                       <i class="fas fa-download"></i> Download Video
-                    </a>
+                    </button>
                   </div>
-                                     <div class="download-option">
-                     <h4><i class="fas fa-music"></i> Audio Download</h4>
-                     <a href="${audioURL}" download="tiktok-audio.mp3" class="btn btn-audio">
-                       <i class="fas fa-download"></i> Download Audio
-                     </a>
-                   </div>
+                  <div class="download-option">
+                    <h4><i class="fas fa-music"></i> Audio Download</h4>
+                    <button onclick="downloadFile('${audioURL}', 'tiktok-audio.mp3', 'audio', event)" class="btn btn-audio">
+                      <i class="fas fa-download"></i> Download Audio
+                    </button>
+                  </div>
                 </div>
+                ${
+                  isMobileDevice()
+                    ? `
+                <div style="text-align: center; margin-top: 15px;">
+                  <button onclick="showMobileHelpModal()" class="btn btn-warning" style="font-size: 14px; padding: 8px 16px;">
+                    <i class="fas fa-question-circle"></i> Mobile Download Help
+                  </button>
+                </div>
+                `
+                    : ""
+                }
               </div>
             `;
             }
@@ -1348,16 +1680,25 @@
                50
              )}...</small></p>
              <div class="download-buttons">
-               <a href="${
+               <button onclick="downloadFile('${
                  item.video
-               }" download="tiktok-video.mp4" class="btn btn-primary">
+               }', 'tiktok-video.mp4', 'video', event)" class="btn btn-primary">
                  <i class="fas fa-video"></i> Video
-               </a>
-                               <a href="${
-                                 item.audio
-                               }" download="tiktok-audio.mp3" class="btn btn-audio">
+               </button>
+               <button onclick="downloadFile('${
+                 item.audio
+               }', 'tiktok-audio.mp3', 'audio', event)" class="btn btn-audio">
                   <i class="fas fa-music"></i> Audio
-                </a>
+                </button>
+               ${
+                 isMobileDevice()
+                   ? `
+               <button onclick="showMobileHelpModal()" class="btn btn-warning" style="font-size: 12px; padding: 6px 12px;">
+                 <i class="fas fa-question-circle"></i> Help
+               </button>
+               `
+                   : ""
+               }
              </div>
         `;
           historyList.appendChild(div);
@@ -1573,6 +1914,88 @@
         const modal = document.getElementById("confirmModal");
         modal.style.display = "none";
         document.removeEventListener("keydown", handleModalKeydown);
+      }
+
+      function showMobileHelpModal() {
+        const modal = document.getElementById("mobileHelpModal");
+        const content = document.getElementById("mobileHelpContent");
+
+        if (isIOSDevice()) {
+          content.innerHTML = `
+            <div style="text-align: left;">
+              <h4><i class="fas fa-apple"></i> iOS Download Instructions:</h4>
+              <ol style="margin: 15px 0; padding-left: 20px;">
+                <li>Tap the download button</li>
+                <li>The video/audio will open in a new tab</li>
+                <li>Long press on the video/audio</li>
+                <li>Select "Save to Files" or "Save to Photos"</li>
+                <li>Choose your preferred location</li>
+              </ol>
+              <p style="color: var(--warning-color); font-weight: bold;">
+                <i class="fas fa-info-circle"></i> Note: iOS requires manual saving due to security restrictions.
+              </p>
+            </div>
+          `;
+        } else if (isMobileDevice()) {
+          content.innerHTML = `
+            <div style="text-align: left;">
+              <h4><i class="fas fa-android"></i> Android Download Instructions:</h4>
+              <ol style="margin: 15px 0; padding-left: 20px;">
+                <li>Tap the download button</li>
+                <li>Allow download permissions if prompted</li>
+                <li>File will be saved to your Downloads folder</li>
+                <li>Check your notification panel for download progress</li>
+              </ol>
+              <p style="color: var(--success-color); font-weight: bold;">
+                <i class="fas fa-check-circle"></i> Downloads should work automatically on most Android devices.
+              </p>
+            </div>
+          `;
+        }
+
+        modal.style.display = "flex";
+
+        // Close modal on overlay click
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            hideMobileHelpModal();
+          }
+        };
+      }
+
+      function hideMobileHelpModal() {
+        const modal = document.getElementById("mobileHelpModal");
+        modal.style.display = "none";
+      }
+
+      // Mobile status bar functions
+      function showMobileStatus(message, type = "info") {
+        if (!isMobileDevice()) return;
+
+        const statusBar = document.getElementById("mobileStatus");
+        const statusText = document.getElementById("mobileStatusText");
+
+        statusText.textContent = message;
+        statusBar.className = `mobile-status show ${type}`;
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+          hideMobileStatus();
+        }, 5000);
+      }
+
+      function hideMobileStatus() {
+        const statusBar = document.getElementById("mobileStatus");
+        statusBar.classList.remove("show");
+      }
+
+      function updateMobileStatus(message) {
+        if (!isMobileDevice()) return;
+
+        const statusText = document.getElementById("mobileStatusText");
+        if (statusText) {
+          statusText.textContent = message;
+        }
       }
 
       function handleModalKeydown(e) {
