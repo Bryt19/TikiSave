@@ -1137,10 +1137,11 @@
 
       // Download file function that works on both desktop and mobile
       async function downloadFile(url, filename, type, event) {
+        // Show loading state
+        const button = event.target.closest("button");
+        const originalText = button.innerHTML;
+
         try {
-          // Show loading state
-          const button = event.target.closest("button");
-          const originalText = button.innerHTML;
           button.innerHTML = '<div class="loading"></div> Downloading...';
           button.disabled = true;
 
@@ -1189,12 +1190,14 @@
                 if (isMobileDevice()) {
                   button.style.background = "var(--success-color)";
                   button.innerHTML = '<i class="fas fa-check"></i> Success!';
+                  button.disabled = false;
                   showMobileStatus(
                     "Video opened! Long press to save.",
                     "success"
                   );
                   setTimeout(() => {
                     button.style.background = "";
+                    button.innerHTML = originalText;
                   }, 2000);
                 }
 
@@ -1225,6 +1228,18 @@
                     `Alternative download method attempted. Check your Downloads folder.`,
                     "success"
                   );
+
+                  // Add success animation for fallback method
+                  if (isMobileDevice()) {
+                    button.style.background = "var(--success-color)";
+                    button.innerHTML = '<i class="fas fa-check"></i> Success!';
+                    button.disabled = false;
+                    showMobileStatus("Download attempted!", "success");
+                    setTimeout(() => {
+                      button.style.background = "";
+                      button.innerHTML = originalText;
+                    }, 2000);
+                  }
                 } catch (fallbackError) {
                   console.error("Fallback download failed:", fallbackError);
                 }
@@ -1250,12 +1265,14 @@
               if (isMobileDevice()) {
                 button.style.background = "var(--success-color)";
                 button.innerHTML = '<i class="fas fa-check"></i> Success!';
+                button.disabled = false;
                 showMobileStatus(
                   "Download started! Check your Downloads folder.",
                   "success"
                 );
                 setTimeout(() => {
                   button.style.background = "";
+                  button.innerHTML = originalText;
                 }, 2000);
               }
             }
@@ -1283,11 +1300,13 @@
             // Add success animation for desktop
             button.style.background = "var(--success-color)";
             button.innerHTML = '<i class="fas fa-check"></i> Success!';
+            button.disabled = false;
             if (isMobileDevice()) {
               showMobileStatus("Download started!", "success");
             }
             setTimeout(() => {
               button.style.background = "";
+              button.innerHTML = originalText;
             }, 2000);
           }
         } catch (error) {
@@ -1321,8 +1340,8 @@
             );
           }
         } finally {
-          // Restore button state
-          if (button) {
+          // Only restore button state if there was an error or if not in success state
+          if (button && !button.innerHTML.includes("Success!")) {
             button.innerHTML = originalText;
             button.disabled = false;
           }
@@ -1544,17 +1563,6 @@
                     </button>
                   </div>
                 </div>
-                ${
-                  isMobileDevice()
-                    ? `
-                <div style="text-align: center; margin-top: 15px;">
-                  <button onclick="showMobileHelpModal()" class="btn btn-warning" style="font-size: 14px; padding: 8px 16px;">
-                    <i class="fas fa-question-circle"></i> Mobile Download Help
-                  </button>
-                </div>
-                `
-                    : ""
-                }
               </div>
             `;
             }
@@ -1685,21 +1693,12 @@
                }', 'tiktok-video.mp4', 'video', event)" class="btn btn-primary">
                  <i class="fas fa-video"></i> Video
                </button>
-               <button onclick="downloadFile('${
-                 item.audio
-               }', 'tiktok-audio.mp3', 'audio', event)" class="btn btn-audio">
+                               <button onclick="downloadFile('${
+                                 item.audio
+                               }', 'tiktok-audio.mp3', 'audio', event)" class="btn btn-audio">
                   <i class="fas fa-music"></i> Audio
                 </button>
-               ${
-                 isMobileDevice()
-                   ? `
-               <button onclick="showMobileHelpModal()" class="btn btn-warning" style="font-size: 12px; padding: 6px 12px;">
-                 <i class="fas fa-question-circle"></i> Help
-               </button>
-               `
-                   : ""
-               }
-             </div>
+              </div>
         `;
           historyList.appendChild(div);
         });
