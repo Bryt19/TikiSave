@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>TikTok Video & Audio Downloader - Free & Fast</title>
     <meta
       name="description"
@@ -502,29 +505,69 @@
         text-align: center;
       }
 
+      .social-buttons-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
       .social-btn {
         display: inline-block;
-        margin: 0 10px;
-        padding: 10px 20px;
+        margin: 5px;
+        padding: 12px 20px;
         border-radius: 25px;
         color: white;
         text-decoration: none;
         font-weight: 600;
         transition: all 0.3s ease;
+        min-height: 44px;
+        min-width: 120px;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
       }
 
       .social-btn:hover {
         transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .social-btn:active {
+        transform: translateY(0);
       }
 
       .facebook {
         background: #1877f2;
       }
+      .facebook:hover {
+        background: #166fe5;
+      }
       .twitter {
         background: #1da1f2;
       }
+      .twitter:hover {
+        background: #1a91da;
+      }
       .whatsapp {
         background: #25d366;
+      }
+      .whatsapp:hover {
+        background: #22c55e;
+      }
+      .linkedin {
+        background: #0077b5;
+      }
+      .linkedin:hover {
+        background: #006ba1;
+      }
+      .pinterest {
+        background: #e4405f;
+      }
+      .pinterest:hover {
+        background: #d63384;
       }
 
       .loading {
@@ -623,53 +666,147 @@
       }
 
       @media (max-width: 768px) {
+        /* Prevent horizontal scrolling */
+        body {
+          overflow-x: hidden;
+          padding: 10px;
+        }
+
+        /* Improve touch targets */
+        .btn,
+        .social-btn,
+        .faq-question {
+          -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+          touch-action: manipulation;
+        }
+
+        /* Better focus states for mobile */
+        .btn:focus,
+        .social-btn:focus,
+        input:focus {
+          outline: 2px solid var(--primary-color);
+          outline-offset: 2px;
+        }
+
+        /* Improve scrolling on mobile */
         .container {
-          padding: 20px;
-          margin: 10px;
+          -webkit-overflow-scrolling: touch;
+          padding: 15px;
+          margin: 5px;
+          border-radius: 12px;
+        }
+
+        /* Better text selection on mobile */
+        .history-item,
+        .faq-answer {
+          -webkit-user-select: text;
+          -moz-user-select: text;
+          -ms-user-select: text;
+          user-select: text;
+        }
+
+        .logo {
+          font-size: 2em;
+        }
+
+        .subtitle {
+          font-size: 1em;
+          margin-bottom: 20px;
         }
 
         .features-grid {
           grid-template-columns: 1fr;
+          gap: 15px;
+          margin: 20px 0;
+        }
+
+        .feature-card {
+          padding: 15px;
+        }
+
+        .feature-icon {
+          font-size: 2em;
         }
 
         .download-options {
           grid-template-columns: 1fr;
+          gap: 10px;
+        }
+
+        .download-option {
+          padding: 12px;
         }
 
         .stats {
           grid-template-columns: repeat(2, 1fr);
+          gap: 15px;
+        }
+
+        .stat-card {
+          padding: 15px;
         }
 
         .theme-toggle {
           top: 10px;
           right: 10px;
-          width: 40px;
-          height: 40px;
-          font-size: 16px;
+          width: 45px;
+          height: 45px;
+          font-size: 18px;
         }
 
         /* Mobile-specific button improvements */
         .btn {
-          padding: 18px 25px;
+          padding: 15px 20px;
           font-size: 16px;
-          min-height: 44px; /* iOS minimum touch target size */
+          min-height: 48px; /* Larger touch target for mobile */
+          margin: 8px 5px;
+          width: 100%;
+          max-width: 300px;
         }
 
         .download-option .btn {
           width: 100%;
-          margin: 10px 0;
+          margin: 8px 0;
         }
 
         .history-item .download-buttons .btn {
-          min-height: 44px;
-          padding: 12px 20px;
+          min-height: 48px;
+          padding: 12px 16px;
+          font-size: 14px;
+          margin: 5px;
+        }
+
+        .history-item .download-buttons {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        /* Social sharing mobile improvements */
+        .social-share {
+          margin: 20px 0;
+        }
+
+        .social-buttons-container {
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .social-btn {
+          width: 100%;
+          max-width: 280px;
+          margin: 0;
+          padding: 15px 20px;
+          font-size: 16px;
+          min-height: 48px;
         }
 
         /* Mobile modal improvements */
         .modal-content {
           width: 95%;
-          max-height: 95vh;
+          max-height: 90vh;
           margin: 10px;
+          border-radius: 12px;
         }
 
         .modal-body {
@@ -678,6 +815,103 @@
 
         .modal-footer {
           padding: 15px 20px;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .modal-footer .btn {
+          width: 100%;
+          margin: 5px 0;
+        }
+
+        /* Input improvements for mobile */
+        .input-group input {
+          padding: 18px 20px;
+          font-size: 16px; /* Prevents zoom on iOS */
+          min-height: 48px;
+        }
+
+        .input-group .clear-btn {
+          right: 12px;
+          width: 36px;
+          height: 36px;
+          font-size: 20px;
+        }
+
+        /* History improvements */
+        .history {
+          padding: 20px;
+          margin-top: 20px;
+        }
+
+        .history-item {
+          padding: 15px;
+        }
+
+        .history-item h4 {
+          font-size: 1em;
+        }
+
+        .history-item p {
+          font-size: 0.9em;
+        }
+
+        /* FAQ mobile improvements */
+        .faq-question {
+          padding: 15px;
+          font-size: 16px;
+        }
+
+        .faq-answer {
+          padding: 15px;
+        }
+
+        /* Footer mobile improvements */
+        .footer {
+          margin-top: 30px;
+          padding-top: 20px;
+        }
+
+        .footer h3 {
+          font-size: 1.2em;
+        }
+
+        .footer h4 {
+          font-size: 1em;
+        }
+
+        .footer p {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 10px;
+          margin: 2px;
+        }
+
+        .logo {
+          font-size: 1.8em;
+        }
+
+        .btn {
+          padding: 12px 16px;
+          font-size: 15px;
+        }
+
+        .social-btn {
+          padding: 12px 16px;
+          font-size: 15px;
+        }
+
+        .stats {
+          grid-template-columns: 1fr;
+        }
+
+        .history-item .download-buttons .btn {
+          font-size: 13px;
+          padding: 10px 14px;
         }
       }
 
@@ -942,33 +1176,34 @@
       </div>
 
       <div class="social-share">
-        <h3>Share with Friends</h3>
-        <br />
-        <a href="#" class="social-btn facebook" onclick="shareOnFacebook()">
-          <i class="fab fa-facebook-f"></i> Facebook
-        </a>
-        <a href="#" class="social-btn twitter" onclick="shareOnTwitter()">
-          <i class="fab fa-twitter"></i> Twitter
-        </a>
-        <a href="#" class="social-btn whatsapp" onclick="shareOnWhatsApp()">
-          <i class="fab fa-whatsapp"></i> WhatsApp
-        </a>
-        <a
-          href="#"
-          class="social-btn"
-          style="background: #0077b5"
-          onclick="shareOnLinkedIn()"
-        >
-          <i class="fab fa-linkedin-in"></i> LinkedIn
-        </a>
-        <a
-          href="#"
-          class="social-btn"
-          style="background: #e4405f"
-          onclick="shareOnPinterest()"
-        >
-          <i class="fab fa-pinterest-p"></i> Pinterest
-        </a>
+        <h3><i class="fas fa-share-alt"></i> Share with Friends</h3>
+        <p style="margin: 15px 0; color: #666; font-size: 14px">
+          Help others discover this amazing TikTok downloader!
+        </p>
+        <div class="social-buttons-container">
+          <button class="social-btn facebook" onclick="shareOnFacebook()">
+            <i class="fab fa-facebook-f"></i> Facebook
+          </button>
+          <button class="social-btn twitter" onclick="shareOnTwitter()">
+            <i class="fab fa-twitter"></i> Twitter
+          </button>
+          <button class="social-btn whatsapp" onclick="shareOnWhatsApp()">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </button>
+          <button class="social-btn linkedin" onclick="shareOnLinkedIn()">
+            <i class="fab fa-linkedin-in"></i> LinkedIn
+          </button>
+          <button class="social-btn pinterest" onclick="shareOnPinterest()">
+            <i class="fab fa-pinterest-p"></i> Pinterest
+          </button>
+          <button
+            class="social-btn"
+            style="background: #6c757d"
+            onclick="copyToClipboard()"
+          >
+            <i class="fas fa-copy"></i> Copy Link
+          </button>
+        </div>
       </div>
 
       <div class="history">
@@ -1125,9 +1360,16 @@
 
       // Check if device is mobile
       function isMobileDevice() {
-        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
+        return (
+          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          ) || window.innerWidth <= 768
         );
+      }
+
+      // Check if device is touch-enabled
+      function isTouchDevice() {
+        return "ontouchstart" in window || navigator.maxTouchPoints > 0;
       }
 
       // Check if device is iOS
@@ -1719,54 +1961,188 @@
       }
 
       // Social sharing functions
+      function getCurrentURL() {
+        return window.location.href;
+      }
+
+      function getShareText() {
+        return "🎵 TikTok Downloader Pro - Download TikTok videos and audio for free! No watermark, high quality, and super fast!";
+      }
+
       function shareOnFacebook() {
-        const url = encodeURIComponent("https://tiki-save.vercel.app/");
-        const text = encodeURIComponent(
-          "Check out this amazing TikTok Downloader!"
-        );
-        window.open(
-          `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`,
-          "_blank"
-        );
+        const url = encodeURIComponent(getCurrentURL());
+        const text = encodeURIComponent(getShareText());
+        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`;
+
+        if (isMobileDevice()) {
+          // Use Web Share API if available on mobile
+          if (navigator.share) {
+            navigator
+              .share({
+                title: "TikTok Downloader Pro",
+                text: getShareText(),
+                url: getCurrentURL(),
+              })
+              .catch((err) => {
+                console.log("Error sharing:", err);
+                window.open(shareUrl, "_blank");
+              });
+          } else {
+            window.open(shareUrl, "_blank");
+          }
+        } else {
+          window.open(shareUrl, "_blank", "width=600,height=400");
+        }
       }
 
       function shareOnTwitter() {
-        const url = encodeURIComponent("https://tiki-save.vercel.app/");
-        const text = encodeURIComponent(
-          "Amazing TikTok Downloader - Download videos and audio for free!"
-        );
-        window.open(
-          `https://twitter.com/intent/tweet?url=${url}&text=${text}`,
-          "_blank"
-        );
+        const url = encodeURIComponent(getCurrentURL());
+        const text = encodeURIComponent(getShareText());
+        const shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+
+        if (isMobileDevice()) {
+          if (navigator.share) {
+            navigator
+              .share({
+                title: "TikTok Downloader Pro",
+                text: getShareText(),
+                url: getCurrentURL(),
+              })
+              .catch((err) => {
+                console.log("Error sharing:", err);
+                window.open(shareUrl, "_blank");
+              });
+          } else {
+            window.open(shareUrl, "_blank");
+          }
+        } else {
+          window.open(shareUrl, "_blank", "width=600,height=400");
+        }
       }
 
       function shareOnWhatsApp() {
-        const url = encodeURIComponent("https://tiki-save.vercel.app/");
-        const text = encodeURIComponent("Check out this TikTok Downloader!");
-        window.open(`https://wa.me/?text=${text}%20${url}`, "_blank");
+        const url = encodeURIComponent(getCurrentURL());
+        const text = encodeURIComponent(getShareText());
+        const shareUrl = `https://wa.me/?text=${text}%20${url}`;
+
+        if (isMobileDevice()) {
+          if (navigator.share) {
+            navigator
+              .share({
+                title: "TikTok Downloader Pro",
+                text: getShareText(),
+                url: getCurrentURL(),
+              })
+              .catch((err) => {
+                console.log("Error sharing:", err);
+                window.open(shareUrl, "_blank");
+              });
+          } else {
+            window.open(shareUrl, "_blank");
+          }
+        } else {
+          window.open(shareUrl, "_blank");
+        }
       }
 
       function shareOnLinkedIn() {
-        const url = encodeURIComponent("https://tiki-save.vercel.app/");
-        const text = encodeURIComponent(
-          "Amazing TikTok Downloader - Download videos and audio for free!"
-        );
-        window.open(
-          `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
-          "_blank"
-        );
+        const url = encodeURIComponent(getCurrentURL());
+        const text = encodeURIComponent(getShareText());
+        const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+
+        if (isMobileDevice()) {
+          if (navigator.share) {
+            navigator
+              .share({
+                title: "TikTok Downloader Pro",
+                text: getShareText(),
+                url: getCurrentURL(),
+              })
+              .catch((err) => {
+                console.log("Error sharing:", err);
+                window.open(shareUrl, "_blank");
+              });
+          } else {
+            window.open(shareUrl, "_blank");
+          }
+        } else {
+          window.open(shareUrl, "_blank", "width=600,height=400");
+        }
       }
 
       function shareOnPinterest() {
-        const url = encodeURIComponent("https://tiki-save.vercel.app/");
-        const text = encodeURIComponent(
-          "TikTok Downloader - Free Video & Audio Downloads"
-        );
-        window.open(
-          `https://pinterest.com/pin/create/button/?url=${url}&description=${text}`,
-          "_blank"
-        );
+        const url = encodeURIComponent(getCurrentURL());
+        const text = encodeURIComponent(getShareText());
+        const shareUrl = `https://pinterest.com/pin/create/button/?url=${url}&description=${text}`;
+
+        if (isMobileDevice()) {
+          if (navigator.share) {
+            navigator
+              .share({
+                title: "TikTok Downloader Pro",
+                text: getShareText(),
+                url: getCurrentURL(),
+              })
+              .catch((err) => {
+                console.log("Error sharing:", err);
+                window.open(shareUrl, "_blank");
+              });
+          } else {
+            window.open(shareUrl, "_blank");
+          }
+        } else {
+          window.open(shareUrl, "_blank", "width=600,height=400");
+        }
+      }
+
+      function copyToClipboard() {
+        const url = getCurrentURL();
+        const text = getShareText();
+        const shareText = `${text}\n\n${url}`;
+
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard
+            .writeText(shareText)
+            .then(() => {
+              showMessage("Link copied to clipboard! 📋", "success");
+              if (isMobileDevice()) {
+                showMobileStatus("Link copied!", "success");
+              }
+            })
+            .catch((err) => {
+              console.log("Error copying to clipboard:", err);
+              fallbackCopyToClipboard(shareText);
+            });
+        } else {
+          fallbackCopyToClipboard(shareText);
+        }
+      }
+
+      function fallbackCopyToClipboard(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+          document.execCommand("copy");
+          showMessage("Link copied to clipboard! 📋", "success");
+          if (isMobileDevice()) {
+            showMobileStatus("Link copied!", "success");
+          }
+        } catch (err) {
+          console.log("Fallback copy failed:", err);
+          showMessage(
+            "Could not copy to clipboard. Please copy manually.",
+            "warning"
+          );
+        }
+
+        document.body.removeChild(textArea);
       }
 
       // Enter key support
