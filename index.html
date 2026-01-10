@@ -1380,7 +1380,29 @@
       // Download file function that works on both desktop and mobile
       async function downloadFile(url, filename, type, event) {
         // Show loading state
-        const button = event.target.closest("button");
+        // Handle case where event might not be passed or button might not be found
+        let button = null;
+        if (event) {
+          button = event.currentTarget || event.target.closest("button");
+        }
+        
+        // If button not found, try to find it by searching for the button that contains the download icon
+        if (!button) {
+          const buttons = document.querySelectorAll('.btn-primary, .btn-audio');
+          for (let btn of buttons) {
+            if (btn.textContent.includes('Download')) {
+              button = btn;
+              break;
+            }
+          }
+        }
+        
+        if (!button) {
+          console.error("Download button not found");
+          showMessage("Error: Could not find download button. Please try again.", "error");
+          return;
+        }
+        
         const originalText = button.innerHTML;
 
         try {
@@ -1780,11 +1802,15 @@
             title = title.toString().trim() || "TikTok Video";
 
             if (!isBatch) {
+              // Escape HTML to prevent XSS and ensure proper rendering
+              const safeAuthor = author.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+              const safeTitle = title.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+              
               result.innerHTML = `
               <div class="video-info fade-in">
                 <h3><i class="fas fa-info-circle"></i> Video Information</h3>
-                <p><strong>Author:</strong> ${author}</p>
-                <p><strong>Title:</strong> ${title}</p>
+                <p><strong>Author:</strong> ${safeAuthor}</p>
+                <p><strong>Title:</strong> ${safeTitle}</p>
                 ${
                   coverURL
                     ? `<img src="${coverURL}" alt="Video Cover" class="video-preview">`
@@ -1794,19 +1820,35 @@
                 <div class="download-options">
                   <div class="download-option">
                     <h4><i class="fas fa-video"></i> Video Download</h4>
-                    <button onclick="downloadFile('${videoURL}', 'tiktok-video.mp4', 'video', event)" class="btn btn-primary">
+                    <button class="btn btn-primary download-video-btn" data-url="${videoURL.replace(/"/g, "&quot;")}" data-filename="tiktok-video.mp4" data-type="video">
                       <i class="fas fa-download"></i> Download Video
                     </button>
                   </div>
                   <div class="download-option">
                     <h4><i class="fas fa-music"></i> Audio Download</h4>
-                    <button onclick="downloadFile('${audioURL}', 'tiktok-audio.mp3', 'audio', event)" class="btn btn-audio">
+                    <button class="btn btn-audio download-audio-btn" data-url="${audioURL.replace(/"/g, "&quot;")}" data-filename="tiktok-audio.mp3" data-type="audio">
                       <i class="fas fa-download"></i> Download Audio
                     </button>
                   </div>
                 </div>
               </div>
             `;
+              
+              // Add event listeners to the newly created buttons
+              const videoBtn = result.querySelector('.download-video-btn');
+              const audioBtn = result.querySelector('.download-audio-btn');
+              
+              if (videoBtn) {
+                videoBtn.addEventListener('click', function(e) {
+                  downloadFile(this.dataset.url, this.dataset.filename, this.dataset.type, e);
+                });
+              }
+              
+              if (audioBtn) {
+                audioBtn.addEventListener('click', function(e) {
+                  downloadFile(this.dataset.url, this.dataset.filename, this.dataset.type, e);
+                });
+              }
             }
 
             // Save to history
@@ -1921,28 +1963,47 @@
           const div = document.createElement("div");
           div.className = "history-item fade-in";
           div.style.animationDelay = `${index * 0.1}s`;
+          
+          // Escape HTML to prevent XSS
+          const safeAuthor = (item.author || "Unknown").replace(/"/g, "&quot;");
+          const safeTitle = (item.title || "TikTok Video").replace(/"/g, "&quot;");
+          const safeVideoUrl = (item.video || "").replace(/"/g, "&quot;");
+          const safeAudioUrl = (item.audio || "").replace(/"/g, "&quot;");
+          
           div.innerHTML = `
-             <h4><i class="fas fa-user"></i> ${item.author}</h4>
-             <p><strong>Title:</strong> ${item.title}</p>
+             <h4><i class="fas fa-user"></i> ${safeAuthor}</h4>
+             <p><strong>Title:</strong> ${safeTitle}</p>
              <p><small><i class="fas fa-calendar"></i> ${item.date}</small></p>
              <p><small><i class="fas fa-link"></i> ${item.link.substring(
                0,
                50
              )}...</small></p>
              <div class="download-buttons">
-               <button onclick="downloadFile('${
-                 item.video
-               }', 'tiktok-video.mp4', 'video', event)" class="btn btn-primary">
+               <button class="btn btn-primary history-download-btn" data-url="${safeVideoUrl}" data-filename="tiktok-video.mp4" data-type="video">
                  <i class="fas fa-video"></i> Video
                </button>
-                               <button onclick="downloadFile('${
-                                 item.audio
-                               }', 'tiktok-audio.mp3', 'audio', event)" class="btn btn-audio">
-                  <i class="fas fa-music"></i> Audio
-                </button>
+               <button class="btn btn-audio history-download-btn" data-url="${safeAudioUrl}" data-filename="tiktok-audio.mp3" data-type="audio">
+                 <i class="fas fa-music"></i> Audio
+               </button>
               </div>
         `;
           historyList.appendChild(div);
+          
+          // Add event listeners to the history download buttons
+          const videoBtn = div.querySelector('.btn-primary.history-download-btn');
+          const audioBtn = div.querySelector('.btn-audio.history-download-btn');
+          
+          if (videoBtn) {
+            videoBtn.addEventListener('click', function(e) {
+              downloadFile(this.dataset.url, this.dataset.filename, this.dataset.type, e);
+            });
+          }
+          
+          if (audioBtn) {
+            audioBtn.addEventListener('click', function(e) {
+              downloadFile(this.dataset.url, this.dataset.filename, this.dataset.type, e);
+            });
+          }
         });
       }
 
