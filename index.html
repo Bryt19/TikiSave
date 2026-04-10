@@ -1,2466 +1,1201 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>TikTok Video & Audio Downloader - Free & Fast</title>
-    <meta
-      name="description"
-      content="Download TikTok videos and audio for free. High quality downloads, no watermark, batch processing, and more features."
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TikiSave - TikTok Downloader</title>
+    <meta name="description" content="High-fidelity TikTok video and audio downloader with no watermarks.">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-      :root {
-        --primary-color: #25f4ee;
-        --secondary-color: #ff0050;
-        --success-color: #4caf50;
-        --warning-color: #ff9800;
-        --danger-color: #e53935;
-        --bg-color: #f9f9f9;
-        --card-bg: #fff;
-        --text-color: #333;
-        --border-color: #ccc;
-        --shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-      }
-
-      [data-theme="dark"] {
-        --bg-color: #1a1a1a;
-        --card-bg: #2d2d2d;
-        --text-color: #fff;
-        --border-color: #555;
-        --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: var(--bg-color);
-        color: var(--text-color);
-        padding: 20px;
-        transition: all 0.3s ease;
-      }
-
-      .header {
-        text-align: center;
-        margin-bottom: 30px;
-      }
-
-      .theme-toggle {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: var(--primary-color);
-        border: none;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        cursor: pointer;
-        font-size: 20px;
-        color: white;
-        box-shadow: var(--shadow);
-        transition: all 0.3s ease;
-      }
-
-      .theme-toggle:hover {
-        transform: scale(1.1);
-      }
-
-      .container {
-        max-width: 800px;
-        margin: auto;
-        background: var(--card-bg);
-        padding: 30px;
-        border-radius: 16px;
-        box-shadow: var(--shadow);
-        transition: all 0.3s ease;
-      }
-
-      .logo {
-        font-size: 2.5em;
-        margin-bottom: 10px;
-        background: linear-gradient(
-          45deg,
-          var(--primary-color),
-          var(--secondary-color)
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .subtitle {
-        color: #666;
-        margin-bottom: 30px;
-        font-size: 1.1em;
-      }
-
-      .input-group {
-        position: relative;
-        margin-bottom: 20px;
-      }
-
-      .input-group input {
-        width: 100%;
-        padding: 15px 20px;
-        font-size: 16px;
-        border: 2px solid var(--border-color);
-        border-radius: 12px;
-        background: var(--card-bg);
-        color: var(--text-color);
-        transition: all 0.3s ease;
-      }
-
-      .input-group input:focus {
-        outline: none;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(37, 244, 238, 0.1);
-      }
-
-      .input-group .clear-btn {
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0, 0, 0, 0.1);
-        border: none;
-        color: #666;
-        cursor: pointer;
-        font-size: 18px;
-        padding: 8px;
-        border-radius: 50%;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        opacity: 0;
-        visibility: hidden;
-      }
-
-      .input-group .clear-btn:hover {
-        background: rgba(0, 0, 0, 0.2);
-        color: #333;
-        transform: translateY(-50%) scale(1.1);
-      }
-
-      .input-group .clear-btn.visible {
-        opacity: 1;
-        visibility: visible;
-      }
-
-      .btn {
-        padding: 15px 30px;
-        font-size: 16px;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-        text-align: center;
-        margin: 5px;
-      }
-
-      .btn-primary {
-        background: linear-gradient(45deg, var(--primary-color), #20d0cc);
-        color: white;
-      }
-
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(37, 244, 238, 0.4);
-      }
-
-      .btn-secondary {
-        background: var(--secondary-color);
-        color: white;
-      }
-
-      .btn-secondary:hover {
-        background: #d10040;
-        transform: translateY(-2px);
-      }
-
-      .btn-success {
-        background: var(--success-color);
-        color: white;
-      }
-
-      .btn-audio {
-        background: #2196f3;
-        color: white;
-      }
-
-      .btn-audio:hover {
-        background: #1976d2;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
-      }
-
-      .btn-warning {
-        background: var(--warning-color);
-        color: white;
-      }
-
-      .btn-danger {
-        background: var(--danger-color);
-        color: white;
-      }
-
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin: 30px 0;
-      }
-
-      .feature-card {
-        background: var(--card-bg);
-        padding: 20px;
-        border-radius: 12px;
-        border: 1px solid var(--border-color);
-        text-align: center;
-        transition: all 0.3s ease;
-      }
-
-      .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: var(--shadow);
-      }
-
-      .feature-icon {
-        font-size: 2.5em;
-        margin-bottom: 15px;
-        color: var(--primary-color);
-      }
-
-      .video-info {
-        background: var(--card-bg);
-        padding: 20px;
-        border-radius: 12px;
-        margin: 20px 0;
-        border: 1px solid var(--border-color);
-      }
-
-      .video-preview {
-        width: 100%;
-        max-width: 400px;
-        border-radius: 12px;
-        margin: 15px 0;
-      }
-
-      .download-options {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin: 20px 0;
-      }
-
-      .download-option {
-        background: var(--card-bg);
-        padding: 15px;
-        border-radius: 8px;
-        border: 1px solid var(--border-color);
-        text-align: center;
-      }
-
-      .quality-badge {
-        background: var(--primary-color);
-        color: white;
-        padding: 4px 8px;
-        border-radius: 12px;
-        font-size: 12px;
-        margin-left: 10px;
-      }
-
-      .batch-input {
-        margin: 20px 0;
-      }
-
-      .batch-input textarea {
-        width: 100%;
-        height: 100px;
-        padding: 15px;
-        border: 2px solid var(--border-color);
-        border-radius: 12px;
-        background: var(--card-bg);
-        color: var(--text-color);
-        font-family: inherit;
-        resize: vertical;
-      }
-
-      .progress-bar {
-        width: 100%;
-        height: 8px;
-        background: var(--border-color);
-        border-radius: 4px;
-        overflow: hidden;
-        margin: 10px 0;
-      }
-
-      .progress-fill {
-        height: 100%;
-        background: var(--primary-color);
-        width: 0%;
-        transition: width 0.3s ease;
-      }
-
-      .history {
-        margin-top: 30px;
-        background: var(--card-bg);
-        padding: 25px;
-        border-radius: 16px;
-        border: 2px solid var(--border-color);
-        box-shadow: var(--shadow);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .history::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(
-          45deg,
-          var(--primary-color),
-          var(--secondary-color)
-        );
-      }
-
-      .history h3 {
-        margin-bottom: 20px;
-        color: var(--text-color);
-        font-size: 1.4em;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid var(--border-color);
-      }
-
-      .history-item {
-        background: var(--bg-color);
-        padding: 20px;
-        border-radius: 12px;
-        margin-bottom: 15px;
-        border: 1px solid var(--border-color);
-        transition: all 0.3s ease;
-        position: relative;
-      }
-
-      .history-item:hover {
-        transform: translateX(5px);
-        box-shadow: var(--shadow);
-        border-color: var(--primary-color);
-      }
-
-      .history-item h4 {
-        color: var(--primary-color);
-        margin-bottom: 10px;
-        font-size: 1.1em;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .history-item p {
-        margin: 8px 0;
-        color: var(--text-color);
-        font-size: 0.95em;
-      }
-
-      .history-item p strong {
-        color: var(--secondary-color);
-      }
-
-      .history-item small {
-        color: #666;
-        font-size: 0.85em;
-      }
-
-      .history-item a {
-        color: var(--primary-color);
-        text-decoration: none;
-        margin: 0 10px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-      }
-
-      .history-item a:hover {
-        text-decoration: none;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(37, 244, 238, 0.3);
-      }
-
-      .history-item .download-buttons {
-        margin-top: 15px;
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-
-      .history-item .download-buttons .btn {
-        margin: 0;
-        padding: 8px 16px;
-        font-size: 13px;
-        border-radius: 8px;
-        min-width: 100px;
-        font-weight: 600;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        letter-spacing: 0.5px;
-      }
-
-      .history-item .download-buttons .btn-primary {
-        background: linear-gradient(45deg, var(--primary-color), #20d0cc);
-        color: white;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-      }
-
-      .history-item .download-buttons .btn-audio {
-        background: linear-gradient(45deg, #2196f3, #1976d2);
-        color: white;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-      }
-
-      .history-item .download-buttons .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        border-color: rgba(255, 255, 255, 0.4);
-      }
-
-      .stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 20px;
-        margin: 30px 0;
-      }
-
-      .stat-card {
-        background: var(--card-bg);
-        padding: 20px;
-        border-radius: 12px;
-        text-align: center;
-        border: 1px solid var(--border-color);
-      }
-
-      .stat-number {
-        font-size: 2em;
-        font-weight: bold;
-        color: var(--primary-color);
-      }
-
-      .faq-section {
-        margin-top: 40px;
-      }
-
-      .faq-item {
-        background: var(--card-bg);
-        margin-bottom: 15px;
-        border-radius: 12px;
-        overflow: hidden;
-        border: 1px solid var(--border-color);
-      }
-
-      .faq-question {
-        background: var(--primary-color);
-        color: white;
-        padding: 15px 20px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-      }
-
-      .faq-question:hover {
-        background: #20d0cc;
-      }
-
-      .faq-answer {
-        padding: 20px;
-        display: none;
-      }
-
-      .faq-answer.active {
-        display: block;
-      }
-
-      .social-share {
-        margin: 30px 0;
-        text-align: center;
-      }
-
-      .social-buttons-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 20px;
-      }
-
-      .social-btn {
-        display: inline-block;
-        margin: 5px;
-        padding: 12px 20px;
-        border-radius: 25px;
-        color: white;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        min-height: 44px;
-        min-width: 120px;
-        text-align: center;
-        border: none;
-        cursor: pointer;
-        font-size: 14px;
-      }
-
-      .social-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      }
-
-      .social-btn:active {
-        transform: translateY(0);
-      }
-
-      .facebook {
-        background: #1877f2;
-      }
-      .facebook:hover {
-        background: #166fe5;
-      }
-      .twitter {
-        background: #1da1f2;
-      }
-      .twitter:hover {
-        background: #1a91da;
-      }
-      .whatsapp {
-        background: #25d366;
-      }
-      .whatsapp:hover {
-        background: #22c55e;
-      }
-      .linkedin {
-        background: #0077b5;
-      }
-      .linkedin:hover {
-        background: #006ba1;
-      }
-      .pinterest {
-        background: #e4405f;
-      }
-      .pinterest:hover {
-        background: #d63384;
-      }
-
-      .loading {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid #f3f3f3;
-        border-top: 3px solid var(--primary-color);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
+        :root {
+            --bg-deep: #0B0B0C;
+            --bg-card: #18181B;
+            --bg-card-hover: #1F1F23;
+            --bg-input: rgba(0, 0, 0, 0.2);
+            --bg-nav: rgba(24, 24, 27, 0.8);
+            --accent-purple: #9F7AEA;
+            --accent-blue: #667EEA;
+            --accent-gradient: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            --hero-gradient: linear-gradient(to bottom, #FFFFFF 0%, #CBD5E0 100%);
+            --text-primary: #FFFFFF;
+            --text-secondary: #CBD5E1;
+            --text-muted: #64748B;
+            --border: rgba(255, 255, 255, 0.08);
+            --success: #10B981;
+            --error: #EF4444;
+            --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        100% {
-          transform: rotate(360deg);
+
+        [data-theme="light"] {
+            --bg-deep: #F8F9FA;
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F3F5;
+            --bg-input: #F1F3F5;
+            --bg-nav: rgba(255, 255, 255, 0.82);
+            --accent-purple: #7C3AED; /* Deeper purple */
+            --accent-blue: #2563EB; /* Deeper blue */
+            --accent-gradient: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+            --hero-gradient: linear-gradient(to bottom, #0F172A 0%, #334155 100%);
+            --text-primary: #0F172A;
+            --text-secondary: #334155;
+            --text-muted: #64748B;
+            --border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
         }
-      }
 
-      .error {
-        background: #ffebee;
-        color: #c62828;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 15px 0;
-        border-left: 4px solid var(--danger-color);
-      }
-
-      .success {
-        background: #e8f5e8;
-        color: #2e7d32;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 15px 0;
-        border-left: 4px solid var(--success-color);
-      }
-
-      .warning {
-        background: #fff3e0;
-        color: #ef6c00;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 15px 0;
-        border-left: 4px solid var(--warning-color);
-      }
-
-      /* Mobile download status */
-      .mobile-status {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--card-bg);
-        border: 2px solid var(--primary-color);
-        border-radius: 25px;
-        padding: 12px 20px;
-        box-shadow: var(--shadow);
-        z-index: 1000;
-        display: none;
-        animation: slideUp 0.3s ease-out;
-      }
-
-      @keyframes slideUp {
-        from {
-          transform: translateX(-50%) translateY(100%);
-          opacity: 0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
-        to {
-          transform: translateX(-50%) translateY(0);
-          opacity: 1;
-        }
-      }
 
-      .mobile-status.show {
-        display: block;
-      }
-
-      .mobile-status.success {
-        border-color: var(--success-color);
-        background: var(--success-color);
-        color: white;
-      }
-
-      .mobile-status.error {
-        border-color: var(--danger-color);
-        background: var(--danger-color);
-        color: white;
-      }
-
-      .mobile-status.info {
-        border-color: var(--primary-color);
-        background: var(--primary-color);
-        color: white;
-      }
-
-      @media (max-width: 768px) {
-        /* Prevent horizontal scrolling */
         body {
-          overflow-x: hidden;
-          padding: 10px;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Improve touch targets */
-        .btn,
-        .social-btn,
-        .faq-question {
-          -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
-          touch-action: manipulation;
-        }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 10px; }
 
-        /* Better focus states for mobile */
-        .btn:focus,
-        .social-btn:focus,
-        input:focus {
-          outline: 2px solid var(--primary-color);
-          outline-offset: 2px;
-        }
-
-        /* Improve scrolling on mobile */
-        .container {
-          -webkit-overflow-scrolling: touch;
-          padding: 15px;
-          margin: 5px;
-          border-radius: 12px;
-        }
-
-        /* Better text selection on mobile */
-        .history-item,
-        .faq-answer {
-          -webkit-user-select: text;
-          -moz-user-select: text;
-          -ms-user-select: text;
-          user-select: text;
+        /* Header */
+        header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(11, 11, 12, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
         }
 
         .logo {
-          font-size: 2em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -0.04em;
         }
 
-        .subtitle {
-          font-size: 1em;
-          margin-bottom: 20px;
+        .logo span {
+            background: linear-gradient(135deg, #FFFFFF 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .features-grid {
-          grid-template-columns: 1fr;
-          gap: 15px;
-          margin: 20px 0;
-        }
-
-        .feature-card {
-          padding: 15px;
-        }
-
-        .feature-icon {
-          font-size: 2em;
-        }
-
-        .download-options {
-          grid-template-columns: 1fr;
-          gap: 10px;
-        }
-
-        .download-option {
-          padding: 12px;
-        }
-
-        .stats {
-          grid-template-columns: repeat(2, 1fr);
-          gap: 15px;
-        }
-
-        .stat-card {
-          padding: 15px;
+        .logo i { 
+            font-size: 1.6rem;
+            color: var(--accent-purple);
+            filter: drop-shadow(0 0 8px rgba(159, 122, 234, 0.4));
         }
 
         .theme-toggle {
-          top: 10px;
-          right: 10px;
-          width: 45px;
-          height: 45px;
-          font-size: 18px;
+            cursor: pointer;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        
+        .theme-toggle:hover { 
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            border-color: var(--accent-purple);
+            transform: translateY(-1px);
         }
 
-        /* Mobile-specific button improvements */
-        .btn {
-          padding: 15px 20px;
-          font-size: 16px;
-          min-height: 48px; /* Larger touch target for mobile */
-          margin: 8px 5px;
-          width: 100%;
-          max-width: 300px;
+        .theme-toggle i {
+            font-size: 1.1rem;
         }
 
-        .download-option .btn {
-          width: 100%;
-          margin: 8px 0;
+        /* Main Container */
+        main {
+            flex: 1;
+            padding: 0 20px 100px 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
         }
 
-        .history-item .download-buttons .btn {
-          min-height: 48px;
-          padding: 12px 16px;
-          font-size: 14px;
-          margin: 5px;
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
         }
 
-        .history-item .download-buttons {
-          flex-direction: column;
-          gap: 8px;
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Social sharing mobile improvements */
-        .social-share {
-          margin: 20px 0;
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 40px 0;
         }
 
-        .social-buttons-container {
-          flex-direction: column;
-          align-items: center;
-          gap: 8px;
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            background: var(--hero-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .social-btn {
-          width: 100%;
-          max-width: 280px;
-          margin: 0;
-          padding: 15px 20px;
-          font-size: 16px;
-          min-height: 48px;
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.5;
+            max-width: 300px;
+            margin: 0 auto;
         }
 
-        /* Mobile modal improvements */
-        .modal-content {
-          width: 95%;
-          max-height: 90vh;
-          margin: 10px;
-          border-radius: 12px;
+        /* Input Card */
+        .input-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
         }
 
-        .modal-body {
-          padding: 20px;
+        @media (max-width: 380px) {
+            .input-card { padding: 16px; }
+            .hero h1 { font-size: 2.1rem; }
+            .logo { font-size: 1.3rem; }
         }
 
-        .modal-footer {
-          padding: 15px 20px;
-          flex-direction: column;
-          gap: 10px;
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 16px;
         }
 
-        .modal-footer .btn {
-          width: 100%;
-          margin: 5px 0;
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
         }
 
-        /* Input improvements for mobile */
-        .input-group input {
-          padding: 18px 20px;
-          font-size: 16px; /* Prevents zoom on iOS */
-          min-height: 48px;
+        .input-wrapper input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 16px 16px 48px;
+            color: var(--text-primary);
+            font-size: 16px; /* Explicit 16px to prevent iOS zoom */
+            outline: none;
+            transition: var(--transition);
         }
 
-        .input-group .clear-btn {
-          right: 12px;
-          width: 36px;
-          height: 36px;
-          font-size: 20px;
+        .input-wrapper input:focus {
+            border-color: var(--accent-purple);
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 0 4px rgba(173, 139, 255, 0.1);
         }
 
-        /* History improvements */
-        .history {
-          padding: 20px;
-          margin-top: 20px;
+        .primary-btn {
+            width: 100%;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            color: #000;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 12px 24px -8px rgba(106, 75, 162, 0.5);
+        }
+
+        [data-theme="light"] .primary-btn:hover {
+            box-shadow: 0 12px 24px -8px rgba(106, 75, 162, 0.2);
+        }
+
+        .primary-btn:active { transform: translateY(0); filter: brightness(0.9); }
+
+        .secondary-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .secondary-btn {
+            flex: 1;
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover { 
+            background: var(--text-muted); 
+            color: var(--bg-deep); 
+            border-color: transparent;
+        }
+
+        [data-theme="light"] .secondary-btn:hover {
+            background: var(--text-primary);
+            color: var(--bg-card);
+        }
+
+        /* Feature Cards */
+        .feature-grid {
+            display: grid;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .feature-icon-box {
+            width: 48px;
+            height: 48px;
+            background: rgba(173, 139, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: var(--accent-purple);
+            font-size: 1.25rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Magic Section */
+        .magic-card {
+            margin-top: 32px;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white; /* Keep white for the background image cards */
+        }
+
+        /* Coming soon specific overrides */
+        #page-batch .magic-card {
+            color: var(--text-primary);
+        }
+
+        .magic-card span {
+            display: block;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.6); /* Force visibility on dark image overlays */
+            margin-bottom: 8px;
+        }
+
+        /* Override for text-primary visibility on image cards */
+        .magic-card h2 {
+            font-size: 1.75rem;
+            margin-bottom: 24px;
+            color: #FFFFFF !important;
+        }
+
+        .magic-btn {
+            background: #FFFFFF;
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        /* Result View */
+        .result-status {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            padding: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .preview-container {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 32px;
+            aspect-ratio: 15/20; /* Wide Small aspect ratio */
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto 32px auto;
+            border: 1px solid var(--border);
+        }
+
+        .preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-overlay {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            right: 24px;
+            background: rgba(24, 24, 27, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--accent-purple);
+        }
+
+        .author-details h4 { font-size: 0.95rem; }
+        .author-details p { font-size: 0.8rem; color: var(--text-secondary); }
+
+        .video-caption {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: var(--text-secondary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-label { color: var(--text-secondary); font-size: 0.9rem; }
+        .detail-value { font-weight: 600; font-size: 0.9rem; }
+
+        .tag {
+            background: rgba(127, 179, 255, 0.1);
+            color: var(--accent-blue);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Batch Page */
+        .batch-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .batch-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+        }
+
+        .textarea-card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .textarea-card span {
+            display: block;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--accent-purple);
+            margin-bottom: 16px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            color: var(--text-primary);
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            font-size: 16px; /* Explicit 16px to prevent iOS zoom */
+        }
+
+        /* History Page */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-card span {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .stat-card h2 { font-size: 1.75rem; font-weight: 700; }
+        .stat-card.wide { grid-column: span 2; }
+
+        .history-list {
+            display: grid;
+            gap: 12px;
         }
 
         .history-item {
-          padding: 15px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
         }
 
-        .history-item h4 {
-          font-size: 1em;
+        .history-thumb {
+            width: 64px;
+            height: 64px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: var(--bg-card-hover);
         }
 
-        .history-item p {
-          font-size: 0.9em;
+        .history-info { flex: 1; }
+        .history-info h4 { font-size: 0.9rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+        .history-info p { font-size: 0.75rem; color: var(--text-muted); }
+
+        .history-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--bg-card-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        /* FAQ mobile improvements */
-        .faq-question {
-          padding: 15px;
-          font-size: 16px;
+        .history-action:hover { background: #2D2D33; }
+
+        /* Bottom Nav */
+        nav.bottom-nav {
+            position: fixed;
+            bottom: 24px;
+            bottom: calc(24px + env(safe-area-inset-bottom));
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-nav);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 6px;
+            display: flex;
+            gap: 4px;
+            border: 1px solid var(--border);
+            z-index: 1000;
+            width: calc(100% - 40px);
+            max-width: 380px;
+            box-shadow: var(--shadow);
         }
 
-        .faq-answer {
-          padding: 15px;
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 0;
+            gap: 4px;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 14px;
+            transition: var(--transition);
         }
 
-        /* Footer mobile improvements */
-        .footer {
-          margin-top: 30px;
-          padding-top: 20px;
+        .nav-item i { font-size: 1.25rem; }
+        .nav-item span { font-size: 0.7rem; font-weight: 700; }
+
+        .nav-item.active {
+            background: rgba(173, 139, 255, 0.1);
+            color: var(--accent-purple);
         }
 
-        .footer h3 {
-          font-size: 1.2em;
+        /* Utilities */
+        .mb-32 { margin-bottom: 32px; }
+        .text-center { text-align: center; }
+        
+        /* Mobile Status */
+        .status-toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 12px 20px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 2000;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow);
         }
 
-        .footer h4 {
-          font-size: 1em;
+        .status-toast.show { transform: translateX(-50%) translateY(0); }
+        .status-toast.success h4 { color: var(--success); }
+        .status-toast.error h4 { color: var(--error); }
+
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
-        .footer p {
-          font-size: 14px;
-        }
-      }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-      @media (max-width: 480px) {
-        .container {
-          padding: 10px;
-          margin: 2px;
-        }
-
-        .logo {
-          font-size: 1.8em;
-        }
-
-        .btn {
-          padding: 12px 16px;
-          font-size: 15px;
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 20px;
         }
 
-        .social-btn {
-          padding: 12px 16px;
-          font-size: 15px;
+        .modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: modalIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .stats {
-          grid-template-columns: 1fr;
+        @keyframes modalIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
-        .history-item .download-buttons .btn {
-          font-size: 13px;
-          padding: 10px 14px;
+        .modal-card h3 { font-size: 1.5rem; margin-bottom: 12px; }
+        .modal-card p { color: var(--text-secondary); margin-bottom: 24px; font-size: 0.95rem; }
+
+        .modal-actions { display: flex; gap: 12px; }
+        .modal-actions button { flex: 1; }
+
+        .btn-cancel {
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
         }
-      }
 
-      .fade-in {
-        animation: fadeIn 0.5s ease-in;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* Modal Styles */
-      .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        backdrop-filter: blur(5px);
-      }
-
-      .modal-content {
-        background: var(--card-bg);
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        max-width: 500px;
-        width: 90%;
-        max-height: 90vh;
-        overflow: hidden;
-        animation: modalSlideIn 0.3s ease-out;
-      }
-
-      @keyframes modalSlideIn {
-        from {
-          opacity: 0;
-          transform: translateY(-50px) scale(0.9);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
-
-      .modal-header {
-        background: linear-gradient(
-          45deg,
-          var(--primary-color),
-          var(--secondary-color)
-        );
-        color: white;
-        padding: 20px;
-        text-align: center;
-      }
-
-      .modal-header h3 {
-        margin: 0;
-        font-size: 1.3em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-      }
-
-      .modal-body {
-        padding: 25px;
-        text-align: center;
-      }
-
-      .modal-body p {
-        margin: 0;
-        font-size: 1.1em;
-        color: var(--text-color);
-        line-height: 1.5;
-      }
-
-      .modal-footer {
-        padding: 20px;
-        display: flex;
-        gap: 15px;
-        justify-content: center;
-        border-top: 1px solid var(--border-color);
-      }
-
-      .modal-footer .btn {
-        min-width: 120px;
-      }
-
-      .modal-footer .btn-secondary {
-        background: #6c757d;
-        color: white;
-      }
-
-      .modal-footer .btn-secondary:hover {
-        background: #5a6268;
-        transform: translateY(-2px);
-      }
-
-      .modal-footer .btn-danger {
-        background: var(--danger-color);
-        color: white;
-      }
-
-      .modal-footer .btn-danger:hover {
-        background: #c62828;
-        transform: translateY(-2px);
-      }
     </style>
-  </head>
-  <body>
-    <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
-      <i class="fas fa-moon"></i>
-    </button>
+</head>
+<body>
 
-    <!-- Confirmation Modal -->
-    <div id="confirmModal" class="modal-overlay" style="display: none">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-exclamation-triangle"></i> Confirm Action</h3>
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Clear History?</h3>
+            <p>This action cannot be undone. All your recent downloads will be removed from this device.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="primary-btn" id="confirm-clear-btn" style="background: var(--error); color: white;">Clear All</button>
+            </div>
         </div>
-        <div class="modal-body">
-          <p id="confirmMessage"></p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" onclick="hideConfirmModal()">
-            Cancel
-          </button>
-          <button class="btn btn-danger" id="confirmActionBtn">Confirm</button>
-        </div>
-      </div>
     </div>
 
-    <!-- Mobile Download Help Modal -->
-    <div id="mobileHelpModal" class="modal-overlay" style="display: none">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-mobile-alt"></i> Mobile Download Help</h3>
-        </div>
-        <div class="modal-body">
-          <div id="mobileHelpContent">
-            <!-- Content will be populated based on device -->
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" onclick="hideMobileHelpModal()">
-            Got it!
-          </button>
-        </div>
-      </div>
+    <div id="toast" class="status-toast">
+        <i class="fa-solid fa-circle-check"></i>
+        <h4 id="toast-msg">Success!</h4>
     </div>
 
-    <!-- Mobile Download Status Bar -->
-    <div id="mobileStatus" class="mobile-status">
-      <i class="fas fa-download"></i>
-      <span id="mobileStatusText">Downloading...</span>
-    </div>
-
-    <div class="container">
-      <div class="header">
-        <div class="logo">🎵 TikTok Downloader Pro</div>
-        <p class="subtitle">
-          Download TikTok videos & audio in high quality • No watermark • Free &
-          Fast
-        </p>
-      </div>
-
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-video"></i></div>
-          <h3>High Quality</h3>
-          <p>Download videos in original quality without watermarks</p>
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-gem"></i>
+            <span>TikiSave</span>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-music"></i></div>
-          <h3>Audio Extract</h3>
-          <p>Extract audio from TikTok videos in MP3 format</p>
+        <div class="theme-toggle">
+            <i class="fa-solid fa-moon"></i>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-bolt"></i></div>
-          <h3>Fast Download</h3>
-          <p>Lightning-fast downloads with our optimized servers</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-list"></i></div>
-          <h3>Batch Processing</h3>
-          <p>Download multiple videos at once with batch processing</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-moon"></i></div>
-          <h3>Dark Mode</h3>
-          <p>Eye-friendly dark theme for comfortable browsing</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon"><i class="fas fa-history"></i></div>
-          <h3>Download History</h3>
-          <p>Keep track of all your downloads with detailed history</p>
-        </div>
-      </div>
+    </header>
 
-      <div class="input-group">
-        <input
-          type="text"
-          id="tiktokLink"
-          placeholder="🔗 Paste TikTok link here (e.g., https://www.tiktok.com/@user/video/1234567890)"
-        />
-        <button class="clear-btn" id="clearInput" title="Clear input">×</button>
-      </div>
+    <main>
+        <!-- Home Page -->
+        <section id="page-home" class="page active">
+            <div class="hero">
+                <h1>Download TikTok Videos Without Watermarks</h1>
+                <p>Fast, HD, and watermark-free downloads in seconds.</p>
+            </div>
 
-      <div style="text-align: center">
-        <button class="btn btn-primary" id="downloadBtn">
-          <i class="fas fa-download"></i> Download Video
-        </button>
-        <button class="btn btn-secondary" id="batchBtn">
-          <i class="fas fa-list"></i> Batch Download
-        </button>
-      </div>
+            <div class="input-card">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-link"></i>
+                    <input type="text" id="tiktok-url" placeholder="Paste TikTok video link here">
+                </div>
+                <button class="primary-btn" id="dl-btn">
+                    <span>Fetch</span>
+                    <i class="fa-solid fa-arrow-down"></i>
+                </button>
+                <div class="secondary-actions">
+                    <button class="secondary-btn"><i class="fa-solid fa-music"></i> Extract Audio</button>
+                    <button class="secondary-btn" onclick="switchPage('batch')"><i class="fa-solid fa-box-archive"></i> Batch Download</button>
+                </div>
+            </div>
 
-      <div id="result"></div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i class="fa-solid fa-display"></i></div>
+                    <h3>High Quality</h3>
+                    <p>Download in original source resolution. Supporting 1080p and 4K exports.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i class="fa-solid fa-mask"></i></div>
+                    <h3>No Login</h3>
+                    <p>No account required. We respect your time and security. Paste and start.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>Privacy Focused</h3>
+                    <p>We don't track your history or store media. Your data remains yours.</p>
+                </div>
+            </div>
 
-      <div class="batch-input" id="batchInput" style="display: none">
-        <h3><i class="fas fa-list"></i> Batch Download</h3>
-        <p>Enter multiple TikTok links (one per line):</p>
-        <textarea
-          id="batchLinks"
-          placeholder="https://www.tiktok.com/@user/video/1234567890&#10;https://www.tiktok.com/@user/video/0987654321&#10;https://www.tiktok.com/@user/video/1122334455"
-        ></textarea>
-        <button class="btn btn-primary" id="processBatch">
-          <i class="fas fa-play"></i> Process All Links
-        </button>
-        <div id="batchProgress" style="display: none">
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-          <p id="progressText">Processing...</p>
+            <div class="magic-card">
+                <span>Security Protocol</span>
+                <h2>End-to-End Privacy Stream</h2>
+                <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 24px;">
+                    <div style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600;">
+                        <i class="fa-solid fa-circle-check" style="color: var(--success);"></i> SSL Encrypted
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600;">
+                        <i class="fa-solid fa-circle-check" style="color: var(--success);"></i> No Logs
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600;">
+                        <i class="fa-solid fa-circle-check" style="color: var(--success);"></i> HD Fetch
+                    </div>
+                </div>
+                <button class="magic-btn" onclick="switchPage('transparency')">View Transparency Report</button>
+            </div>
+        </section>
+
+        <!-- Transparency Report Page -->
+        <section id="page-transparency" class="page">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 32px; cursor: pointer;" onclick="switchPage('home')">
+                <i class="fa-solid fa-arrow-left" style="color: var(--accent-purple);"></i>
+                <span style="font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">Back to Stream</span>
+            </div>
+
+            <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 12px;">Transparency Report</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 40px; line-height: 1.6;">Our commitment to high-fidelity media fetching and user privacy is the core of the TikiSave obsidian-grade experience.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card" style="border-color: var(--success);">
+                    <span style="color: var(--success); font-weight: 800;">STATUS</span>
+                    <h2 style="font-size: 1.25rem;">Live & Secure</h2>
+                </div>
+                <div class="stat-card">
+                    <span style="font-weight: 800;">ENCRYPTION</span>
+                    <h2 style="font-size: 1.25rem;">256-bit SSL</h2>
+                </div>
+            </div>
+
+            <div class="feature-grid" style="margin-top: 0;">
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i class="fa-solid fa-shield-virus"></i></div>
+                    <h3>0% Data Retention</h3>
+                    <p>We do not store TikTok URLs, user metadata, or downloaded files on our servers. Every "Fetch" is processed in real-time and cleared immediately after transmission.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i class="fa-solid fa-server"></i></div>
+                    <h3>Direct Stream Fetch</h3>
+                    <p>Media is retrieved directly from official content delivery networks. We never proxy or re-encode your videos, ensuring the original source quality and zero watermark integrity.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box"><i class="fa-solid fa-user-secret"></i></div>
+                    <h3>No Login Required</h3>
+                    <p>TikiSave never asks for your TikTok credentials or personal information. Your identity remains anonymous throughout the entire downloading process.</p>
+                </div>
+                <div class="feature-card" style="border-style: dashed; background: transparent;">
+                    <div class="feature-icon-box" style="background: rgba(16, 185, 129, 0.1); color: var(--success);"><i class="fa-solid fa-handshake-angle"></i></div>
+                    <h3>Developer Integrity</h3>
+                    <p>This tool is built for ethical media curation. We respect the intellectual property of creators and encourage users to use downloaded content responsibly.</p>
+                </div>
+            </div>
+
+            <div class="text-center" style="margin-top: 40px; padding: 24px; border-top: 1px solid var(--border);">
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Last Internal Audit: 2026-04-10 • Build v1.02-Obsidian</p>
+            </div>
+        </section>
+
+        <!-- Result Page -->
+        <section id="page-result" class="page">
+            <div class="result-status">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Analysis complete.</span>
+            </div>
+
+            <div class="preview-container">
+                <img src="" alt="" class="preview-img" id="result-cover">
+                <div class="author-overlay">
+                    <div class="author-info">
+                        <img src="" alt="" class="author-avatar" id="result-avatar">
+                        <div class="author-details">
+                            <h4 id="result-author">@username</h4>
+                            <p id="result-nickname">User Name</p>
+                        </div>
+                    </div>
+                    <p class="video-caption" id="result-title">Exploring the hidden back-alleys of Neo-Tokyo under the rain...</p>
+                </div>
+            </div>
+
+            <h2 class="mb-32">Download Assets</h2>
+            
+            <button class="primary-btn mb-16" id="btn-dl-video" style="background: var(--accent-purple); color: #000; margin-bottom: 12px;">
+                <i class="fa-solid fa-download"></i> Download Video (HD)
+            </button>
+            <button class="primary-btn mb-32" id="btn-dl-audio" style="background: var(--bg-card-hover); color: var(--text-primary);">
+                <i class="fa-solid fa-music"></i> Download Audio (MP3)
+            </button>
+
+            <div class="details-list mb-32">
+                <div class="detail-row">
+                    <span class="detail-label">File Size</span>
+                    <span class="detail-value" id="res-size">-- MB</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Resolution</span>
+                    <span class="detail-value" id="res-quality">1080 × 1920</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Format</span>
+                    <div style="display: flex; gap: 8px;">
+                        <span class="tag">H.264</span>
+                        <span class="tag" style="background: rgba(173, 139, 255, 0.1); color: var(--accent-purple);">PRC</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="secondary-actions mb-32">
+                <button class="secondary-btn" onclick="switchPage('home')"><i class="fa-solid fa-rotate-left"></i> New URL</button>
+                <button class="secondary-btn" onclick="switchPage('batch')"><i class="fa-solid fa-box-archive"></i> Batch Mode</button>
+            </div>
+        </section>
+
+        <!-- Downloading/Success Page -->
+        <section id="page-downloading" class="page">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 40px;">
+                <div class="history-action" onclick="switchPage('home')" style="width: 44px; height: 44px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <div class="feature-icon-box" style="width: 80px; height: 80px; margin: 0 auto 24px auto; font-size: 2rem;">
+                    <i class="fa-solid fa-cloud-arrow-down fa-bounce"></i>
+                </div>
+                <h2 style="font-size: 2rem; margin-bottom: 12px;">Preparing Download</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 32px;">Your video is being processed for high-speed delivery. Please check your browser's download manager.</p>
+                
+                <div class="magic-card" style="background: var(--bg-card); border-style: dashed;">
+                    <span style="color: var(--accent-purple);">Status</span>
+                    <h3>Download Started</h3>
+                    <p style="font-size: 0.8rem; margin-top: 8px;">Check your device settings if it doesn't appear.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-batch" class="page">
+            <h1 class="batch-title">Batch Stream</h1>
+            <p class="batch-subtitle">A high-fidelity way to curate collections in bulk. Deep processing for multi-link streams.</p>
+
+            <div class="magic-card" style="padding: 64px 24px; border-style: dashed; background: rgba(159, 122, 234, 0.05);">
+                <div class="feature-icon-box" style="margin: 0 auto 24px auto;">
+                    <i class="fa-solid fa-hourglass-half fa-spin-pulse"></i>
+                </div>
+                <h2 style="margin-bottom: 8px;">Coming Soon</h2>
+                <p style="color: var(--text-secondary); max-width: 280px; margin: 0 auto 24px auto;">We're perfecting the deep-stream logic to ensure the highest fidelity for batch exports.</p>
+                <button class="secondary-btn" style="max-width: 200px; margin: 0 auto;" onclick="switchPage('home')">Notify Me</button>
+            </div>
+        </section>
+
+        <!-- History Page -->
+        <section id="page-history" class="page">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span>Total Downloads</span>
+                    <h2 id="stat-total">1,284</h2>
+                </div>
+                <div class="stat-card">
+                    <span>Today</span>
+                    <h2 id="stat-today">42</h2>
+                </div>
+                <div class="stat-card wide">
+                    <span>Storage Saved</span>
+                    <h2 id="stat-storage">12.4 GB</h2>
+                    <p style="font-size: 0.7rem; color: var(--accent-purple); font-weight: 700; margin-top: 8px; text-transform: uppercase;">Premium Optimization</p>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="font-size: 1.25rem;">Recent Activity</h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted); cursor: pointer;" id="clear-history">Clear all <i class="fa-solid fa-trash"></i></span>
+            </div>
+
+            <div class="history-list" id="history-items">
+                <!-- History items load here -->
+            </div>
+        </section>
+    </main>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchPage('home')">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
         </div>
-      </div>
-
-      <div class="stats">
-        <div class="stat-card">
-          <div class="stat-number" id="totalDownloads">0</div>
-          <div>Total Downloads</div>
+        <div class="nav-item" onclick="switchPage('batch')">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Batch</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-number" id="todayDownloads">0</div>
-          <div>Today</div>
+        <div class="nav-item" onclick="switchPage('history')">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>History</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-number" id="successRate">100%</div>
-          <div>Success Rate</div>
-        </div>
-      </div>
-
-      <div class="social-share">
-        <h3><i class="fas fa-share-alt"></i> Share with Friends</h3>
-        <p style="margin: 15px 0; color: #666; font-size: 14px">
-          Help others discover this amazing TikTok downloader!
-        </p>
-        <div class="social-buttons-container">
-          <button class="social-btn facebook" onclick="shareOnFacebook()">
-            <i class="fab fa-facebook-f"></i> Facebook
-          </button>
-          <button class="social-btn twitter" onclick="shareOnTwitter()">
-            <i class="fab fa-twitter"></i> Twitter
-          </button>
-          <button class="social-btn whatsapp" onclick="shareOnWhatsApp()">
-            <i class="fab fa-whatsapp"></i> WhatsApp
-          </button>
-          <button class="social-btn linkedin" onclick="shareOnLinkedIn()">
-            <i class="fab fa-linkedin-in"></i> LinkedIn
-          </button>
-          <button class="social-btn pinterest" onclick="shareOnPinterest()">
-            <i class="fab fa-pinterest-p"></i> Pinterest
-          </button>
-          <button
-            class="social-btn"
-            style="background: #6c757d"
-            onclick="copyToClipboard()"
-          >
-            <i class="fas fa-copy"></i> Copy Link
-          </button>
-        </div>
-      </div>
-
-      <div class="history">
-        <h3><i class="fas fa-history"></i> Download History</h3>
-        <div id="historyList"></div>
-        <button id="clearHistory" class="btn btn-danger">
-          <i class="fas fa-trash"></i> Clear History
-        </button>
-      </div>
-
-      <div class="faq-section">
-        <h3>
-          <i class="fas fa-question-circle"></i> Frequently Asked Questions
-        </h3>
-
-        <div class="faq-item">
-          <div class="faq-question" onclick="toggleFAQ(this)">
-            <i class="fas fa-chevron-down"></i> How to download TikTok videos?
-          </div>
-          <div class="faq-answer">
-            Simply paste the TikTok video link in the input field above and
-            click "Download Video". You can download both video and audio
-            versions.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question" onclick="toggleFAQ(this)">
-            <i class="fas fa-chevron-down"></i> Is this service free?
-          </div>
-          <div class="faq-answer">
-            Yes, our TikTok downloader is completely free to use. No
-            registration or payment required.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question" onclick="toggleFAQ(this)">
-            <i class="fas fa-chevron-down"></i> Can I download multiple videos
-            at once?
-          </div>
-          <div class="faq-answer">
-            Yes! Use the "Batch Download" feature to process multiple TikTok
-            links simultaneously.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question" onclick="toggleFAQ(this)">
-            <i class="fas fa-chevron-down"></i> Is it legal to download TikTok
-            videos?
-          </div>
-          <div class="faq-answer">
-            This tool is for personal use only. Please respect copyright laws
-            and TikTok's terms of service.
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="footer"
-        style="
-          margin-top: 40px;
-          padding-top: 30px;
-          border-top: 1px solid var(--border-color);
-          text-align: center;
-        "
-      >
-        <h3><i class="fas fa-info-circle"></i> About This Tool</h3>
-        <p style="margin: 15px 0; color: #666">
-          This TikTok Downloader is a free, fast, and reliable tool that allows
-          you to download TikTok videos and extract audio without watermarks.
-          Perfect for content creators, researchers, and anyone who wants to
-          save their favorite TikTok content.
-        </p>
-
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-          "
-        >
-          <div>
-            <h4><i class="fas fa-shield-alt"></i> Privacy & Security</h4>
-            <p style="font-size: 14px; color: #666">
-              We don't store your videos or personal data. All downloads are
-              processed securely.
-            </p>
-          </div>
-          <div>
-            <h4><i class="fas fa-globe"></i> Global Access</h4>
-            <p style="font-size: 14px; color: #666">
-              Works worldwide with support for all TikTok regions and languages.
-            </p>
-          </div>
-          <div>
-            <h4><i class="fas fa-clock"></i> 24/7 Availability</h4>
-            <p style="font-size: 14px; color: #666">
-              Our service is available around the clock for your convenience.
-            </p>
-          </div>
-        </div>
-
-        <div
-          style="
-            margin-top: 20px;
-            padding: 15px;
-            background: var(--card-bg);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-          "
-        >
-          <p style="margin: 0; font-size: 14px; color: #666">
-            <i class="fas fa-exclamation-triangle"></i>
-            <strong>Disclaimer:</strong> This tool is for educational and
-            personal use only. Please respect copyright laws and TikTok's terms
-            of service. We are not responsible for any misuse of this tool.
-          </p>
-        </div>
-      </div>
-    </div>
+    </nav>
 
     <script>
-      // Theme toggle functionality
-      const themeToggle = document.getElementById("themeToggle");
-      const body = document.body;
+        // State
+        let currentData = null;
+        let history = JSON.parse(localStorage.getItem('ob-history') || '[]');
+        let stats = JSON.parse(localStorage.getItem('ob-stats') || '{"total": 0, "today": 0, "lastDate": ""}');
 
-      // Check for saved theme preference
-      const savedTheme = localStorage.getItem("theme") || "light";
-      body.setAttribute("data-theme", savedTheme);
-      updateThemeIcon(savedTheme);
+        // Initial load
+        window.addEventListener('load', () => {
+            checkDailyReset();
+            updateStatsUI();
+            renderHistory();
+        });
 
-      themeToggle.addEventListener("click", () => {
-        const currentTheme = body.getAttribute("data-theme");
-        const newTheme = currentTheme === "light" ? "dark" : "light";
+        // Periodic check for midnight reset (if page left open)
+        setInterval(checkDailyReset, 60000); // Check every minute
 
-        body.setAttribute("data-theme", newTheme);
-        localStorage.setItem("theme", newTheme);
-        updateThemeIcon(newTheme);
-      });
+        // Navigation
+        function switchPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            pages.forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
 
-      function updateThemeIcon(theme) {
-        const icon = themeToggle.querySelector("i");
-        if (theme === "dark") {
-          icon.className = "fas fa-sun";
-          themeToggle.title = "Switch to Light Mode";
-        } else {
-          icon.className = "fas fa-moon";
-          themeToggle.title = "Switch to Dark Mode";
-        }
-      }
-
-      // Check if device is mobile
-      function isMobileDevice() {
-        return (
-          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-            navigator.userAgent
-          ) || window.innerWidth <= 768
-        );
-      }
-
-      // Check if device is touch-enabled
-      function isTouchDevice() {
-        return "ontouchstart" in window || navigator.maxTouchPoints > 0;
-      }
-
-      // Check if device is iOS
-      function isIOSDevice() {
-        return /iPad|iPhone|iPod/.test(navigator.userAgent);
-      }
-
-      // Download file function that works on both desktop and mobile
-      async function downloadFile(url, filename, type, event) {
-        // Show loading state
-        // Handle case where event might not be passed or button might not be found
-        let button = null;
-        if (event) {
-          button = event.currentTarget || event.target.closest("button");
-        }
-        
-        // If button not found, try to find it by searching for the button that contains the download icon
-        if (!button) {
-          const buttons = document.querySelectorAll('.btn-primary, .btn-audio');
-          for (let btn of buttons) {
-            if (btn.textContent.includes('Download')) {
-              button = btn;
-              break;
-            }
-          }
-        }
-        
-        if (!button) {
-          console.error("Download button not found");
-          showMessage("Error: Could not find download button. Please try again.", "error");
-          return;
-        }
-        
-        const originalText = button.innerHTML;
-
-        try {
-          button.innerHTML = '<div class="loading"></div> Downloading...';
-          button.disabled = true;
-
-          // Show mobile-specific message for first-time users
-          if (
-            isMobileDevice() &&
-            !localStorage.getItem("mobileDownloadShown")
-          ) {
-            setTimeout(() => {
-              showMessage(
-                `📱 Mobile detected! Tap the help button for download instructions.`,
-                "warning"
-              );
-              localStorage.setItem("mobileDownloadShown", "true");
-            }, 1000);
-          }
-
-          // For mobile devices, we need to handle downloads differently
-          if (isMobileDevice()) {
-            // Mobile device - use fetch and create blob URL
-            const response = await fetch(url);
-            if (!response.ok) throw new Error("Network response was not ok");
-
-            // Show download progress for mobile users
-            if (isMobileDevice()) {
-              button.innerHTML = '<div class="loading"></div> Processing...';
-              showMobileStatus("Processing video/audio...", "info");
-            }
-
-            const blob = await response.blob();
-            const blobUrl = window.URL.createObjectURL(blob);
-
-            // For iOS devices, we need to handle downloads differently
-            if (isIOSDevice()) {
-              // iOS - open in new tab and let user save manually
-              const newTab = window.open(blobUrl, "_blank");
-              if (newTab) {
-                showMessage(
-                  `${
-                    type === "video" ? "Video" : "Audio"
-                  } opened in new tab. Long press to save on iOS.`,
-                  "success"
-                );
-
-                // Add mobile success animation
-                if (isMobileDevice()) {
-                  button.style.background = "var(--success-color)";
-                  button.innerHTML = '<i class="fas fa-check"></i> Success!';
-                  button.disabled = false;
-                  showMobileStatus(
-                    "Video opened! Long press to save.",
-                    "success"
-                  );
-                  setTimeout(() => {
-                    button.style.background = "";
-                    button.innerHTML = originalText;
-                  }, 2000);
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.querySelector('span').innerText.toLowerCase() === pageId) {
+                    item.classList.add('active');
                 }
+            });
 
-                // Show iOS-specific instructions
-                setTimeout(() => {
-                  showMessage(
-                    `💡 Tip: Long press the video/audio in the new tab and select "Save to Files" or "Save to Photos"`,
-                    "warning"
-                  );
-                }, 2000);
-              } else {
-                // Fallback for blocked popups
-                showMessage(
-                  `Please allow popups and try again, or long press the download button to save.`,
-                  "warning"
-                );
+            // Special case for home icon
+            if (pageId === 'home') navItems[0].classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-                // Alternative approach for iOS - try to trigger download directly
-                try {
-                  const link = document.createElement("a");
-                  link.href = blobUrl;
-                  link.download = filename;
-                  link.style.display = "none";
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                  showMessage(
-                    `Alternative download method attempted. Check your Downloads folder.`,
-                    "success"
-                  );
+        // API Logic
+        const dlBtn = document.getElementById('dl-btn');
+        const urlInput = document.getElementById('tiktok-url');
 
-                  // Add success animation for fallback method
-                  if (isMobileDevice()) {
-                    button.style.background = "var(--success-color)";
-                    button.innerHTML = '<i class="fas fa-check"></i> Success!';
-                    button.disabled = false;
-                    showMobileStatus("Download attempted!", "success");
-                    setTimeout(() => {
-                      button.style.background = "";
-                      button.innerHTML = originalText;
-                    }, 2000);
-                  }
-                } catch (fallbackError) {
-                  console.error("Fallback download failed:", fallbackError);
-                }
-              }
-            } else {
-              // Android and other mobile devices
-              const link = document.createElement("a");
-              link.href = blobUrl;
-              link.download = filename;
-              link.style.display = "none";
-
-              // Append to body, click, and cleanup
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-
-              showMessage(
-                `${type === "video" ? "Video" : "Audio"} download started!`,
-                "success"
-              );
-
-              // Add mobile success animation
-              if (isMobileDevice()) {
-                button.style.background = "var(--success-color)";
-                button.innerHTML = '<i class="fas fa-check"></i> Success!';
-                button.disabled = false;
-                showMobileStatus(
-                  "Download started! Check your Downloads folder.",
-                  "success"
-                );
-                setTimeout(() => {
-                  button.style.background = "";
-                  button.innerHTML = originalText;
-                }, 2000);
-              }
+        dlBtn.addEventListener('click', async () => {
+            const url = urlInput.value.trim();
+            if (!url) {
+                showToast("Please enter a URL", "error");
+                return;
             }
 
-            // Clean up the blob URL
-            setTimeout(() => {
-              window.URL.revokeObjectURL(blobUrl);
-            }, 1000);
-          } else {
-            // Desktop device - use traditional download
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = filename;
-            link.style.display = "none";
-
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            showMessage(
-              `${type === "video" ? "Video" : "Audio"} download started!`,
-              "success"
-            );
-
-            // Add success animation for desktop
-            button.style.background = "var(--success-color)";
-            button.innerHTML = '<i class="fas fa-check"></i> Success!';
-            button.disabled = false;
-            if (isMobileDevice()) {
-              showMobileStatus("Download started!", "success");
-            }
-            setTimeout(() => {
-              button.style.background = "";
-              button.innerHTML = originalText;
-            }, 2000);
-          }
-        } catch (error) {
-          console.error("Download error:", error);
-
-          // Mobile-specific error messages
-          if (isMobileDevice()) {
-            if (error.message.includes("Network response was not ok")) {
-              showMessage(
-                `Network error. Please check your internet connection and try again.`,
-                "error"
-              );
-              showMobileStatus("Network error!", "error");
-            } else if (isIOSDevice()) {
-              showMessage(
-                `iOS download failed. Try the help button for alternative methods.`,
-                "error"
-              );
-              showMobileStatus("iOS download failed!", "error");
-            } else {
-              showMessage(
-                `Mobile download failed. Please try again or check your device settings.`,
-                "error"
-              );
-              showMobileStatus("Download failed!", "error");
-            }
-          } else {
-            showMessage(
-              `Failed to download ${type}. Please try again.`,
-              "error"
-            );
-          }
-        } finally {
-          // Only restore button state if there was an error or if not in success state
-          if (button && !button.innerHTML.includes("Success!")) {
-            button.innerHTML = originalText;
-            button.disabled = false;
-          }
-        }
-      }
-
-      // Main functionality
-      const btn = document.getElementById("downloadBtn");
-      const input = document.getElementById("tiktokLink");
-      const result = document.getElementById("result");
-      const historyList = document.getElementById("historyList");
-      const clearBtn = document.getElementById("clearHistory");
-      const clearInputBtn = document.getElementById("clearInput");
-      const batchBtn = document.getElementById("batchBtn");
-      const batchInput = document.getElementById("batchInput");
-      const processBatchBtn = document.getElementById("processBatch");
-
-      // Load saved history and stats
-      let history = JSON.parse(localStorage.getItem("downloadHistory")) || [];
-      let stats = JSON.parse(localStorage.getItem("downloadStats")) || {
-        total: 0,
-        today: 0,
-        success: 0,
-        failed: 0,
-        lastResetDate: new Date().toDateString(),
-      };
-
-      // Check if we need to reset today's count (new day)
-      function checkDailyReset() {
-        const today = new Date().toDateString();
-        const lastReset = stats.lastResetDate || new Date().toDateString();
-
-        if (lastReset !== today) {
-          // Reset today's count for new day
-          stats.today = 0;
-          stats.lastResetDate = today;
-          localStorage.setItem("downloadStats", JSON.stringify(stats));
-          console.log("Daily stats reset - new day started");
-        }
-      }
-
-      renderHistory();
-      updateStats();
-
-      // Initialize clear button state
-      toggleClearButton();
-
-      // Set up daily reset check - check every hour and at midnight
-      setInterval(checkDailyReset, 60 * 60 * 1000); // Check every hour
-
-      // Also check when the page becomes visible (user returns to tab)
-      document.addEventListener("visibilitychange", () => {
-        if (!document.hidden) {
-          checkDailyReset();
-          updateStats();
-        }
-      });
-
-      // Clear input button functionality
-      function toggleClearButton() {
-        if (input.value.trim() !== "") {
-          clearInputBtn.classList.add("visible");
-        } else {
-          clearInputBtn.classList.remove("visible");
-        }
-      }
-
-      // Show/hide clear button based on input content
-      input.addEventListener("input", toggleClearButton);
-      input.addEventListener("paste", toggleClearButton);
-      input.addEventListener("keyup", toggleClearButton);
-
-      clearInputBtn.addEventListener("click", () => {
-        input.value = "";
-        input.focus();
-        toggleClearButton();
-      });
-
-      // Batch download toggle
-      batchBtn.addEventListener("click", () => {
-        batchInput.style.display =
-          batchInput.style.display === "none" ? "block" : "none";
-        batchBtn.innerHTML =
-          batchInput.style.display === "none"
-            ? '<i class="fas fa-list"></i> Batch Download'
-            : '<i class="fas fa-times"></i> Close Batch';
-      });
-
-      // Main download functionality
-      btn.addEventListener("click", async () => {
-        await downloadVideo(input.value.trim());
-      });
-
-      // Process batch downloads
-      processBatchBtn.addEventListener("click", async () => {
-        const links = document
-          .getElementById("batchLinks")
-          .value.trim()
-          .split("\n")
-          .filter((link) => link.trim());
-        if (links.length === 0) {
-          showMessage("Please enter at least one TikTok link", "error");
-          return;
-        }
-
-        const progressBar = document.getElementById("batchProgress");
-        const progressFill = document.getElementById("progressFill");
-        const progressText = document.getElementById("progressText");
-
-        progressBar.style.display = "block";
-        processBatchBtn.disabled = true;
-
-        for (let i = 0; i < links.length; i++) {
-          const link = links[i].trim();
-          if (link) {
-            progressText.textContent = `Processing ${i + 1} of ${
-              links.length
-            }: ${link.substring(0, 50)}...`;
-            progressFill.style.width = `${((i + 1) / links.length) * 100}%`;
+            dlBtn.disabled = true;
+            dlBtn.innerHTML = '<div class="loader"></div>';
 
             try {
-              await downloadVideo(link, true);
-              await new Promise((resolve) => setTimeout(resolve, 1000)); // Delay between requests
-            } catch (error) {
-              console.error(`Failed to process: ${link}`, error);
-            }
-          }
-        }
+                const response = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
+                const result = await response.json();
 
-        progressBar.style.display = "none";
-        processBatchBtn.disabled = false;
-        showMessage(
-          `Batch processing complete! Processed ${links.length} links.`,
-          "success"
-        );
-      });
-
-      async function downloadVideo(url, isBatch = false) {
-        if (!url) {
-          if (!isBatch) showMessage("Please enter a TikTok link", "error");
-          return;
-        }
-
-        if (!isBatch) {
-          result.innerHTML = '<div class="loading"></div> Fetching video...';
-        }
-
-        try {
-          const apiURL = `https://www.tikwm.com/api/?url=${encodeURIComponent(
-            url
-          )}`;
-          const res = await fetch(apiURL);
-          const data = await res.json();
-
-          // Debug: Log the API response structure (remove this in production)
-          console.log("API Response:", data);
-          if (data.data) {
-            console.log("Video Data:", data.data);
-            console.log("Author Object:", data.data.author);
-            console.log("Title Object:", data.data.title);
-          }
-
-          if (data && data.data) {
-            const videoURL = data.data.play;
-            const audioURL = data.data.music;
-            const coverURL = data.data.cover;
-
-            // Better author extraction with fallbacks
-            let author = "Unknown";
-            if (data.data.author) {
-              if (typeof data.data.author === "string") {
-                author = data.data.author;
-              } else if (data.data.author.nickname) {
-                author = data.data.author.nickname;
-              } else if (data.data.author.unique_id) {
-                author = data.data.author.unique_id;
-              } else if (data.data.author.name) {
-                author = data.data.author.name;
-              }
-            }
-
-            // Better title extraction with fallbacks
-            let title = "TikTok Video";
-            if (data.data.title) {
-              if (typeof data.data.title === "string") {
-                title = data.data.title;
-              } else if (data.data.title.text) {
-                title = data.data.title.text;
-              }
-            }
-
-            // Clean up the extracted values
-            author = author.toString().trim() || "Unknown";
-            title = title.toString().trim() || "TikTok Video";
-
-            if (!isBatch) {
-              // Escape HTML to prevent XSS and ensure proper rendering
-              const safeAuthor = author.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
-              const safeTitle = title.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
-              
-              result.innerHTML = `
-              <div class="video-info fade-in">
-                <h3><i class="fas fa-info-circle"></i> Video Information</h3>
-                <p><strong>Author:</strong> ${safeAuthor}</p>
-                <p><strong>Title:</strong> ${safeTitle}</p>
-                ${
-                  coverURL
-                    ? `<img src="${coverURL}" alt="Video Cover" class="video-preview">`
-                    : ""
+                if (result.code === 0 && result.data) {
+                    currentData = result.data;
+                    displayResult(currentData);
+                    saveToHistory(currentData, url);
+                    updateStats();
+                    switchPage('result');
+                } else {
+                    showToast("Failed to fetch video. Check URL.", "error");
                 }
-                
-                <div class="download-options">
-                  <div class="download-option">
-                    <h4><i class="fas fa-video"></i> Video Download</h4>
-                    <button class="btn btn-primary download-video-btn" data-url="${videoURL.replace(/"/g, "&quot;")}" data-filename="tiktok-video.mp4" data-type="video">
-                      <i class="fas fa-download"></i> Download Video
-                    </button>
-                  </div>
-                  <div class="download-option">
-                    <h4><i class="fas fa-music"></i> Audio Download</h4>
-                    <button class="btn btn-audio download-audio-btn" data-url="${audioURL.replace(/"/g, "&quot;")}" data-filename="tiktok-audio.mp3" data-type="audio">
-                      <i class="fas fa-download"></i> Download Audio
-                    </button>
-                  </div>
-                </div>
-              </div>
-            `;
-              
-              // Add event listeners to the newly created buttons
-              const videoBtn = result.querySelector('.download-video-btn');
-              const audioBtn = result.querySelector('.download-audio-btn');
-              
-              if (videoBtn) {
-                videoBtn.addEventListener('click', function(e) {
-                  downloadFile(this.dataset.url, this.dataset.filename, this.dataset.type, e);
-                });
-              }
-              
-              if (audioBtn) {
-                audioBtn.addEventListener('click', function(e) {
-                  downloadFile(this.dataset.url, this.dataset.filename, this.dataset.type, e);
-                });
-              }
+            } catch (err) {
+                showToast("Network error. Try again.", "error");
+            } finally {
+                dlBtn.disabled = false;
+                dlBtn.innerHTML = '<span>Download</span> <i class="fa-solid fa-arrow-down"></i>';
             }
+        });
 
-            // Save to history
+        function displayResult(data) {
+            document.getElementById('result-cover').src = data.cover;
+            document.getElementById('result-author').innerText = '@' + (data.author.unique_id || 'user');
+            document.getElementById('result-nickname').innerText = data.author.nickname || 'TikTok User';
+            document.getElementById('result-avatar').src = data.author.avatar;
+            document.getElementById('result-title').innerText = data.title || 'No caption';
+            document.getElementById('res-size').innerText = (data.size / (1024 * 1024)).toFixed(1) + ' MB';
+
+            // Set buttons
+            document.getElementById('btn-dl-video').onclick = () => {
+                downloadFile(data.play, 'obsidian_video.mp4');
+                switchPage('downloading');
+            };
+            document.getElementById('btn-dl-audio').onclick = () => {
+                downloadFile(data.music, 'obsidian_audio.mp3');
+                switchPage('downloading');
+            };
+        }
+
+        async function downloadFile(url, name) {
+            showToast("Starting download...", "success");
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // History & Stats
+        function saveToHistory(data, originalUrl) {
             const item = {
-              link: url,
-              video: videoURL,
-              audio: audioURL,
-              author: author,
-              title: title,
-              date: new Date().toLocaleString(),
+                id: Date.now(),
+                title: data.title || 'TikTok Video',
+                author: data.author.nickname || 'User',
+                thumb: data.cover,
+                url: data.play,
+                music: data.music,
+                time: "Just now"
             };
             history.unshift(item);
-            if (history.length > 20) history.pop(); // Keep max 20
-            localStorage.setItem("downloadHistory", JSON.stringify(history));
-
-            // Update stats
-            stats.total++;
-            stats.success++;
-            if (isToday(new Date())) stats.today++;
-            localStorage.setItem("downloadStats", JSON.stringify(stats));
-
-            if (!isBatch) {
-              renderHistory();
-              updateStats();
-              showMessage("Video fetched successfully!", "success");
-            }
-          } else {
-            if (!isBatch) {
-              result.innerHTML =
-                '<div class="error">❌ Could not fetch video. Please check the link and try again.</div>';
-            }
-            stats.failed++;
-            localStorage.setItem("downloadStats", JSON.stringify(stats));
-          }
-        } catch (err) {
-          console.error(err);
-          if (!isBatch) {
-            result.innerHTML =
-              '<div class="error">⚠️ Error fetching video. Please try again later.</div>';
-          }
-          stats.failed++;
-          localStorage.setItem("downloadStats", JSON.stringify(stats));
-        }
-      }
-
-      function showMessage(message, type) {
-        const messageDiv = document.createElement("div");
-        messageDiv.className = type;
-        messageDiv.textContent = message;
-        result.appendChild(messageDiv);
-
-        setTimeout(() => {
-          messageDiv.remove();
-        }, 5000);
-      }
-
-      function isToday(date) {
-        const today = new Date();
-        return (
-          date.getDate() === today.getDate() &&
-          date.getMonth() === today.getMonth() &&
-          date.getFullYear() === today.getFullYear()
-        );
-      }
-
-      function updateStats() {
-        // Check for daily reset before updating stats
-        checkDailyReset();
-
-        document.getElementById("totalDownloads").textContent = stats.total;
-        document.getElementById("todayDownloads").textContent = stats.today;
-        const successRate =
-          stats.total > 0
-            ? Math.round((stats.success / stats.total) * 100)
-            : 100;
-        document.getElementById("successRate").textContent = successRate + "%";
-      }
-
-      clearBtn.addEventListener("click", () => {
-        showConfirmModal(
-          "Are you sure you want to clear all download history?",
-          () => {
-            history = [];
-            localStorage.removeItem("downloadHistory");
+            if (history.length > 20) history.pop();
+            localStorage.setItem('ob-history', JSON.stringify(history));
             renderHistory();
-            hideConfirmModal();
-          }
-        );
-      });
-
-      function renderHistory() {
-        historyList.innerHTML = "";
-        const clearHistoryBtn = document.getElementById("clearHistory");
-
-        if (history.length === 0) {
-          historyList.innerHTML = `
-              <div style="text-align: center; padding: 40px 20px; color: #666;">
-                <i class="fas fa-history" style="font-size: 3em; margin-bottom: 15px; opacity: 0.5;"></i>
-                <p style="font-size: 1.1em; margin-bottom: 10px;">No downloads yet</p>
-                <p style="font-size: 0.9em;">Start by downloading your first TikTok video!</p>
-              </div>
-            `;
-          // Hide clear history button when no history
-          clearHistoryBtn.style.display = "none";
-          return;
         }
 
-        // Show clear history button when there's history
-        clearHistoryBtn.style.display = "inline-block";
+        function renderHistory() {
+            const container = document.getElementById('history-items');
+            if (history.length === 0) {
+                container.innerHTML = '<p class="text-center" style="color: var(--text-muted); padding: 40px 0;">No recent activity</p>';
+                return;
+            }
 
-        history.forEach((item, index) => {
-          const div = document.createElement("div");
-          div.className = "history-item fade-in";
-          div.style.animationDelay = `${index * 0.1}s`;
-          
-          // Escape HTML to prevent XSS
-          const safeAuthor = (item.author || "Unknown").replace(/"/g, "&quot;");
-          const safeTitle = (item.title || "TikTok Video").replace(/"/g, "&quot;");
-          const safeVideoUrl = (item.video || "").replace(/"/g, "&quot;");
-          const safeAudioUrl = (item.audio || "").replace(/"/g, "&quot;");
-          
-          div.innerHTML = `
-             <h4><i class="fas fa-user"></i> ${safeAuthor}</h4>
-             <p><strong>Title:</strong> ${safeTitle}</p>
-             <p><small><i class="fas fa-calendar"></i> ${item.date}</small></p>
-             <p><small><i class="fas fa-link"></i> ${item.link.substring(
-               0,
-               50
-             )}...</small></p>
-             <div class="download-buttons">
-               <button class="btn btn-primary history-download-btn" data-url="${safeVideoUrl}" data-filename="tiktok-video.mp4" data-type="video">
-                 <i class="fas fa-video"></i> Video
-               </button>
-               <button class="btn btn-audio history-download-btn" data-url="${safeAudioUrl}" data-filename="tiktok-audio.mp3" data-type="audio">
-                 <i class="fas fa-music"></i> Audio
-               </button>
-              </div>
-        `;
-          historyList.appendChild(div);
-          
-          // Add event listeners to the history download buttons
-          const videoBtn = div.querySelector('.btn-primary.history-download-btn');
-          const audioBtn = div.querySelector('.btn-audio.history-download-btn');
-          
-          if (videoBtn) {
-            videoBtn.addEventListener('click', function(e) {
-              downloadFile(this.dataset.url, this.dataset.filename, this.dataset.type, e);
-            });
-          }
-          
-          if (audioBtn) {
-            audioBtn.addEventListener('click', function(e) {
-              downloadFile(this.dataset.url, this.dataset.filename, this.dataset.type, e);
-            });
-          }
-        });
-      }
-
-      // FAQ functionality
-      function toggleFAQ(element) {
-        const answer = element.nextElementSibling;
-        const icon = element.querySelector("i");
-
-        if (answer.classList.contains("active")) {
-          answer.classList.remove("active");
-          icon.className = "fas fa-chevron-down";
-        } else {
-          answer.classList.add("active");
-          icon.className = "fas fa-chevron-up";
-        }
-      }
-
-      // Social sharing functions
-      function getCurrentURL() {
-        return window.location.href;
-      }
-
-      function getShareText() {
-        return "🎵 TikTok Downloader Pro - Download TikTok videos and audio for free! No watermark, high quality, and super fast!";
-      }
-
-      function shareOnFacebook() {
-        const url = encodeURIComponent(getCurrentURL());
-        const text = encodeURIComponent(getShareText());
-        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`;
-
-        if (isMobileDevice()) {
-          // Use Web Share API if available on mobile
-          if (navigator.share) {
-            navigator
-              .share({
-                title: "TikTok Downloader Pro",
-                text: getShareText(),
-                url: getCurrentURL(),
-              })
-              .catch((err) => {
-                console.log("Error sharing:", err);
-                window.open(shareUrl, "_blank");
-              });
-          } else {
-            window.open(shareUrl, "_blank");
-          }
-        } else {
-          window.open(shareUrl, "_blank", "width=600,height=400");
-        }
-      }
-
-      function shareOnTwitter() {
-        const url = encodeURIComponent(getCurrentURL());
-        const text = encodeURIComponent(getShareText());
-        const shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
-
-        if (isMobileDevice()) {
-          if (navigator.share) {
-            navigator
-              .share({
-                title: "TikTok Downloader Pro",
-                text: getShareText(),
-                url: getCurrentURL(),
-              })
-              .catch((err) => {
-                console.log("Error sharing:", err);
-                window.open(shareUrl, "_blank");
-              });
-          } else {
-            window.open(shareUrl, "_blank");
-          }
-        } else {
-          window.open(shareUrl, "_blank", "width=600,height=400");
-        }
-      }
-
-      function shareOnWhatsApp() {
-        const url = encodeURIComponent(getCurrentURL());
-        const text = encodeURIComponent(getShareText());
-        const shareUrl = `https://wa.me/?text=${text}%20${url}`;
-
-        if (isMobileDevice()) {
-          if (navigator.share) {
-            navigator
-              .share({
-                title: "TikTok Downloader Pro",
-                text: getShareText(),
-                url: getCurrentURL(),
-              })
-              .catch((err) => {
-                console.log("Error sharing:", err);
-                window.open(shareUrl, "_blank");
-              });
-          } else {
-            window.open(shareUrl, "_blank");
-          }
-        } else {
-          window.open(shareUrl, "_blank");
-        }
-      }
-
-      function shareOnLinkedIn() {
-        const url = encodeURIComponent(getCurrentURL());
-        const text = encodeURIComponent(getShareText());
-        const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
-
-        if (isMobileDevice()) {
-          if (navigator.share) {
-            navigator
-              .share({
-                title: "TikTok Downloader Pro",
-                text: getShareText(),
-                url: getCurrentURL(),
-              })
-              .catch((err) => {
-                console.log("Error sharing:", err);
-                window.open(shareUrl, "_blank");
-              });
-          } else {
-            window.open(shareUrl, "_blank");
-          }
-        } else {
-          window.open(shareUrl, "_blank", "width=600,height=400");
-        }
-      }
-
-      function shareOnPinterest() {
-        const url = encodeURIComponent(getCurrentURL());
-        const text = encodeURIComponent(getShareText());
-        const shareUrl = `https://pinterest.com/pin/create/button/?url=${url}&description=${text}`;
-
-        if (isMobileDevice()) {
-          if (navigator.share) {
-            navigator
-              .share({
-                title: "TikTok Downloader Pro",
-                text: getShareText(),
-                url: getCurrentURL(),
-              })
-              .catch((err) => {
-                console.log("Error sharing:", err);
-                window.open(shareUrl, "_blank");
-              });
-          } else {
-            window.open(shareUrl, "_blank");
-          }
-        } else {
-          window.open(shareUrl, "_blank", "width=600,height=400");
-        }
-      }
-
-      function copyToClipboard() {
-        const url = getCurrentURL();
-        const text = getShareText();
-        const shareText = `${text}\n\n${url}`;
-
-        if (navigator.clipboard && window.isSecureContext) {
-          navigator.clipboard
-            .writeText(shareText)
-            .then(() => {
-              showMessage("Link copied to clipboard! 📋", "success");
-              if (isMobileDevice()) {
-                showMobileStatus("Link copied!", "success");
-              }
-            })
-            .catch((err) => {
-              console.log("Error copying to clipboard:", err);
-              fallbackCopyToClipboard(shareText);
-            });
-        } else {
-          fallbackCopyToClipboard(shareText);
-        }
-      }
-
-      function fallbackCopyToClipboard(text) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.position = "fixed";
-        textArea.style.left = "-999999px";
-        textArea.style.top = "-999999px";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
-        try {
-          document.execCommand("copy");
-          showMessage("Link copied to clipboard! 📋", "success");
-          if (isMobileDevice()) {
-            showMobileStatus("Link copied!", "success");
-          }
-        } catch (err) {
-          console.log("Fallback copy failed:", err);
-          showMessage(
-            "Could not copy to clipboard. Please copy manually.",
-            "warning"
-          );
+            container.innerHTML = history.map(item => `
+                <div class="history-item">
+                    <img src="${item.thumb}" class="history-thumb">
+                    <div class="history-info">
+                        <h4>${item.title}</h4>
+                        <p>${item.author} • ${item.time}</p>
+                    </div>
+                    <div class="history-action" onclick="downloadFile('${item.url}', 'video.mp4')">
+                        <i class="fa-solid fa-repeat"></i>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        document.body.removeChild(textArea);
-      }
-
-      // Enter key support
-      input.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-          btn.click();
-        }
-      });
-
-      // Auto-focus input on page load
-      window.addEventListener("load", () => {
-        input.focus();
-        updateStats();
-        restoreScrollPosition();
-      });
-
-      // Save scroll position before page unload
-      window.addEventListener("beforeunload", () => {
-        localStorage.setItem("scrollPosition", window.scrollY);
-        localStorage.setItem("activeSection", getCurrentActiveSection());
-        localStorage.setItem("openFAQs", JSON.stringify(getOpenFAQs()));
-      });
-
-      // Restore scroll position and section state
-      function restoreScrollPosition() {
-        const savedPosition = localStorage.getItem("scrollPosition");
-        const activeSection = localStorage.getItem("activeSection");
-
-        if (savedPosition) {
-          setTimeout(() => {
-            window.scrollTo(0, parseInt(savedPosition));
-          }, 100);
+        function updateStats() {
+            stats.total++;
+            stats.today++;
+            localStorage.setItem('ob-stats', JSON.stringify(stats));
+            updateStatsUI();
         }
 
-        if (activeSection) {
-          setTimeout(() => {
-            showSection(activeSection);
-          }, 200);
+        function updateStatsUI() {
+            document.getElementById('stat-total').innerText = stats.total.toLocaleString();
+            document.getElementById('stat-today').innerText = stats.today.toLocaleString();
+            document.getElementById('stat-storage').innerText = (stats.total * 12.4 / 1000).toFixed(1) + ' GB';
         }
 
-        // Restore FAQ state
-        setTimeout(() => {
-          restoreFAQState();
-        }, 300);
-      }
-
-      // Get current active section
-      function getCurrentActiveSection() {
-        if (batchInput.style.display !== "none") return "batch";
-        if (result.innerHTML && !result.innerHTML.includes("loading"))
-          return "result";
-        return "main";
-      }
-
-      // Show specific section
-      function showSection(section) {
-        switch (section) {
-          case "batch":
-            batchInput.style.display = "block";
-            batchBtn.innerHTML = '<i class="fas fa-times"></i> Close Batch';
-            break;
-          case "result":
-            // Result section is already visible if there's content
-            break;
-          default:
-            // Main section - ensure batch is closed
-            batchInput.style.display = "none";
-            batchBtn.innerHTML = '<i class="fas fa-list"></i> Batch Download';
-        }
-      }
-
-      // Get currently open FAQs
-      function getOpenFAQs() {
-        const openFAQs = [];
-        document
-          .querySelectorAll(".faq-answer.active")
-          .forEach((answer, index) => {
-            openFAQs.push(index);
-          });
-        return openFAQs;
-      }
-
-      // Restore FAQ state
-      function restoreFAQState() {
-        const openFAQs = JSON.parse(localStorage.getItem("openFAQs") || "[]");
-        openFAQs.forEach((index) => {
-          const faqItems = document.querySelectorAll(".faq-item");
-          if (faqItems[index]) {
-            const question = faqItems[index].querySelector(".faq-question");
-            const answer = faqItems[index].querySelector(".faq-answer");
-            const icon = question.querySelector("i");
-
-            answer.classList.add("active");
-            icon.className = "fas fa-chevron-up";
-          }
-        });
-      }
-
-      // Keyboard shortcuts
-      document.addEventListener("keydown", (e) => {
-        // Ctrl/Cmd + Enter to download
-        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-          e.preventDefault();
-          btn.click();
+        function checkDailyReset() {
+            const today = new Date().toDateString();
+            if (stats.lastDate !== today) {
+                stats.today = 0;
+                stats.lastDate = today;
+                localStorage.setItem('ob-stats', JSON.stringify(stats));
+                updateStatsUI(); // Ensure UI reflects the reset immediately
+            }
         }
 
-        // Ctrl/Cmd + K to focus input
-        if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-          e.preventDefault();
-          input.focus();
+        // Toast
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = msg;
+            toast.className = `status-toast show ${type}`;
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // Escape to clear input
-        if (e.key === "Escape") {
-          input.value = "";
-          input.focus();
-        }
-      });
-
-      // Modal functions
-      function showConfirmModal(message, onConfirm) {
-        const modal = document.getElementById("confirmModal");
-        const messageEl = document.getElementById("confirmMessage");
-        const confirmBtn = document.getElementById("confirmActionBtn");
-
-        messageEl.textContent = message;
-        modal.style.display = "flex";
-
-        // Store the callback
-        confirmBtn.onclick = onConfirm;
-
-        // Close modal on overlay click
-        modal.onclick = (e) => {
-          if (e.target === modal) {
-            hideConfirmModal();
-          }
+        document.getElementById('clear-history').onclick = () => {
+            document.getElementById('confirm-modal').style.display = 'flex';
         };
 
-        // Close modal on Escape key
-        document.addEventListener("keydown", handleModalKeydown);
-      }
-
-      function hideConfirmModal() {
-        const modal = document.getElementById("confirmModal");
-        modal.style.display = "none";
-        document.removeEventListener("keydown", handleModalKeydown);
-      }
-
-      function showMobileHelpModal() {
-        const modal = document.getElementById("mobileHelpModal");
-        const content = document.getElementById("mobileHelpContent");
-
-        if (isIOSDevice()) {
-          content.innerHTML = `
-            <div style="text-align: left;">
-              <h4><i class="fas fa-apple"></i> iOS Download Instructions:</h4>
-              <ol style="margin: 15px 0; padding-left: 20px;">
-                <li>Tap the download button</li>
-                <li>The video/audio will open in a new tab</li>
-                <li>Long press on the video/audio</li>
-                <li>Select "Save to Files" or "Save to Photos"</li>
-                <li>Choose your preferred location</li>
-              </ol>
-              <p style="color: var(--warning-color); font-weight: bold;">
-                <i class="fas fa-info-circle"></i> Note: iOS requires manual saving due to security restrictions.
-              </p>
-            </div>
-          `;
-        } else if (isMobileDevice()) {
-          content.innerHTML = `
-            <div style="text-align: left;">
-              <h4><i class="fas fa-android"></i> Android Download Instructions:</h4>
-              <ol style="margin: 15px 0; padding-left: 20px;">
-                <li>Tap the download button</li>
-                <li>Allow download permissions if prompted</li>
-                <li>File will be saved to your Downloads folder</li>
-                <li>Check your notification panel for download progress</li>
-              </ol>
-              <p style="color: var(--success-color); font-weight: bold;">
-                <i class="fas fa-check-circle"></i> Downloads should work automatically on most Android devices.
-              </p>
-            </div>
-          `;
-        }
-
-        modal.style.display = "flex";
-
-        // Close modal on overlay click
-        modal.onclick = (e) => {
-          if (e.target === modal) {
-            hideMobileHelpModal();
-          }
+        document.getElementById('confirm-clear-btn').onclick = () => {
+            history = [];
+            localStorage.setItem('ob-history', '[]');
+            renderHistory();
+            closeModal();
+            showToast("History cleared");
         };
-      }
 
-      function hideMobileHelpModal() {
-        const modal = document.getElementById("mobileHelpModal");
-        modal.style.display = "none";
-      }
-
-      // Mobile status bar functions
-      function showMobileStatus(message, type = "info") {
-        if (!isMobileDevice()) return;
-
-        const statusBar = document.getElementById("mobileStatus");
-        const statusText = document.getElementById("mobileStatusText");
-
-        statusText.textContent = message;
-        statusBar.className = `mobile-status show ${type}`;
-
-        // Auto-hide after 5 seconds
-        setTimeout(() => {
-          hideMobileStatus();
-        }, 5000);
-      }
-
-      function hideMobileStatus() {
-        const statusBar = document.getElementById("mobileStatus");
-        statusBar.classList.remove("show");
-      }
-
-      function updateMobileStatus(message) {
-        if (!isMobileDevice()) return;
-
-        const statusText = document.getElementById("mobileStatusText");
-        if (statusText) {
-          statusText.textContent = message;
+        function closeModal() {
+            document.getElementById('confirm-modal').style.display = 'none';
         }
-      }
 
-      function handleModalKeydown(e) {
-        if (e.key === "Escape") {
-          hideConfirmModal();
+        // Batch logic removed (Coming Soon)
+
+        // Theme toggle logic
+        const themeBtn = document.querySelector('.theme-toggle');
+        const themeIcon = themeBtn.querySelector('i');
+        
+        // Initialize theme
+        let currentTheme = localStorage.getItem('ob-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        themeBtn.onclick = () => {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('ob-theme', currentTheme);
+            updateThemeIcon(currentTheme);
+            showToast(`Switched to ${currentTheme} mode`);
+        };
+
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.className = 'fa-solid fa-sun';
+            } else {
+                themeIcon.className = 'fa-solid fa-moon';
+            }
         }
-      }
 
-      // Show keyboard shortcuts help
-      const shortcutsHelp = `
-       <div style="margin: 20px 0; padding: 15px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-color);">
-         <h4><i class="fas fa-keyboard"></i> Keyboard Shortcuts</h4>
-         <p style="margin: 10px 0; font-size: 14px;">
-           <strong>Ctrl/Cmd + Enter:</strong> Download video<br>
-           <strong>Ctrl/Cmd + K:</strong> Focus input field<br>
-           <strong>Escape:</strong> Clear input field
-         </p>
-       </div>
-     `;
-
-      // Add shortcuts help after the input group
-      setTimeout(() => {
-        const inputGroup = document.querySelector(".input-group");
-        if (inputGroup) {
-          const helpDiv = document.createElement("div");
-          helpDiv.innerHTML = shortcutsHelp;
-          inputGroup.parentNode.insertBefore(helpDiv, inputGroup.nextSibling);
-        }
-      }, 1000);
     </script>
-  </body>
+</body>
 </html>
