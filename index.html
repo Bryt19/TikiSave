@@ -919,7 +919,7 @@
                 <div class="magic-card" style="background: var(--bg-card); border-style: dashed;">
                     <span style="color: var(--accent-purple);">Status</span>
                     <h3>Download Started</h3>
-                    <p style="font-size: 0.8rem; margin-top: 8px;">Check your device settings if it doesn't appear.</p>
+                    <p style="font-size: 0.8rem; margin-top: 8px;">iPhone users: If the video opens in a new tab, tap the <b>Share</b> icon and select <b>"Save to Files"</b>.</p>
                 </div>
             </div>
         </section>
@@ -1075,12 +1075,36 @@
 
         async function downloadFile(url, name) {
             showToast("Starting download...", "success");
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = name;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            
+            try {
+                // Attempt to fetch as blob for better mobile/iOS "Download to Device" behavior
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = blobUrl;
+                a.download = name;
+                document.body.appendChild(a);
+                a.click();
+                
+                // Cleanup
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(blobUrl);
+                    document.body.removeChild(a);
+                }, 100);
+            } catch (error) {
+                // Fallback for CORS or older browsers
+                console.warn("Direct blob download failed, falling back to window.open", error);
+                const a = document.createElement('a');
+                a.href = url;
+                a.target = '_blank';
+                a.download = name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
         }
 
         // History & Stats
