@@ -201,7 +201,7 @@
             margin-bottom: 16px;
         }
 
-        .input-wrapper i {
+        .input-wrapper i:first-child {
             position: absolute;
             left: 16px;
             top: 50%;
@@ -215,11 +215,32 @@
             background: var(--bg-input);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 16px 16px 16px 48px;
+            padding: 16px 48px 16px 48px; /* Increased right padding for clear btn */
             color: var(--text-primary);
-            font-size: 16px; /* Explicit 16px to prevent iOS zoom */
+            font-size: 16px;
             outline: none;
             transition: var(--transition);
+        }
+
+        .clear-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .clear-icon:hover {
+            color: var(--text-primary);
+            background: var(--bg-card-hover);
         }
 
         .input-wrapper input:focus {
@@ -751,6 +772,7 @@
                 <div class="input-wrapper">
                     <i class="fa-solid fa-link"></i>
                     <input type="text" id="tiktok-url" placeholder="Paste TikTok video link here">
+                    <i class="fa-solid fa-xmark clear-icon" id="clear-url" style="display: none;"></i>
                 </div>
                 <button class="primary-btn" id="dl-btn">
                     <span>Fetch</span>
@@ -1064,16 +1086,32 @@
 
             // Set buttons
             document.getElementById('btn-dl-video').onclick = () => {
-                downloadFile(data.play, 'obsidian_video.mp4');
+                downloadFile(data.play, 'tikisave_video.mp4');
                 switchPage('downloading');
             };
             document.getElementById('btn-dl-audio').onclick = () => {
-                downloadFile(data.music, 'obsidian_audio.mp3');
+                downloadFile(data.music, 'tikisave_audio.mp3');
                 switchPage('downloading');
             };
         }
 
-        async function downloadFile(url, name) {
+        const clearBtn = document.getElementById('clear-url');
+        
+        const toggleClearBtn = () => {
+            clearBtn.style.display = urlInput.value.length > 0 ? 'flex' : 'none';
+        };
+
+        urlInput.addEventListener('input', toggleClearBtn);
+        urlInput.addEventListener('keyup', toggleClearBtn);
+        urlInput.addEventListener('paste', () => setTimeout(toggleClearBtn, 10));
+
+        clearBtn.onclick = () => {
+            urlInput.value = '';
+            toggleClearBtn();
+            urlInput.focus();
+        };
+
+        async function processUrl(url, targetPage = 'result') {
             showToast("Starting download...", "success");
             
             try {
