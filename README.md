@@ -1,236 +1,71 @@
-# 🎵 TikTok Downloader Pro
+# 💎 TikiSave - High-Fidelity TikTok Downloader
 
-A modern, feature-rich web application for downloading TikTok videos and extracting audio without watermarks. Built with vanilla HTML, CSS, and JavaScript for maximum compatibility and performance.
+TikiSave is a premium, obsidian-grade web application designed for high-fidelity TikTok video and audio extraction. Engineered with an "Obsidian" aesthetic, it prioritizes privacy, security, and extreme visual polish, providing a watermark-free experience without compromising on content integrity.
 
 ## ✨ Features
 
-- **🎬 High-Quality Downloads**: Download TikTok videos in original quality without watermarks
-- **🎵 Audio Extraction**: Extract audio from TikTok videos in MP3 format
-- **⚡ Fast Processing**: Lightning-fast downloads with optimized processing
-- **📋 Batch Processing**: Download multiple videos simultaneously
-- **🌙 Dark Mode**: Eye-friendly dark theme with automatic preference saving
-- **📱 Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
-- **📚 Download History**: Keep track of all your downloads with detailed information
-- **🔒 Privacy Focused**: No registration required, no personal data stored
-- **🌍 Global Access**: Works worldwide with support for all TikTok regions
+- **🎬 Obsidian-Grade Fetching**: Retrieve TikTok videos in original source resolution without any watermarks.
+- **🎵 High-Fidelity Audio**: Extract the purest audio streams in MP3 format for local curation.
+- **💎 Premium Design System**: A high-density "Obsidian" UI featuring glassmorphism, smooth transitions, and a dual-theme obsidian/zinc engine.
+- **🛡️ Transparency Protocol**: Integrated transparency report explaining our zero-retention fetching logic and security standards.
+- **📊 Real-time Analytics**: Track your curation efficiency with daily stats and storage optimization metrics.
+- **📋 Batch Processing (Pro)**: *Coming Soon* — A dedicated deep-stream logic for multi-link collection curation.
+- **🔒 0% Data Retention**: No registration, no cookies, and no personal data storage. Every fetch is ephemeral.
 
-## 🚀 How to Use
+## 🚀 The Experience
 
-### Single Video Download
+### Single Stream Fetch
+1. **Paste Link**: Input any TikTok video URL into the refined crystal input field.
+2. **Fetch**: Click the **Fetch** button to initiate the deep-analysis protocol.
+3. **Analyze**: View a high-fidelity preview, including resolution, file size, and author metadata.
+4. **Export**: Choose between **Download Video (HD)** or **Download Audio (MP3)** to save your assets.
 
-1. Open the application in your web browser
-2. Paste a TikTok video link in the input field
-3. Click "Download Video" to fetch video information
-4. Choose between video or audio download options
-5. Click the download button to save the file
+### Download History
+Access your **Recent Activity** with a single tap. TikiSave stores your last 20 fetches locally on your device for quick re-exports, with a secure **Clear All** confirmation protocol to protect your digital footprint.
 
-### Batch Download
+## 🛠️ Technical Architecture
 
-1. Click "Batch Download" to open the batch processing interface
-2. Enter multiple TikTok links (one per line)
-3. Click "Process All Links" to download multiple videos
-4. Monitor progress with the built-in progress bar
-
-### Keyboard Shortcuts
-
-- **Ctrl/Cmd + Enter**: Download video
-- **Ctrl/Cmd + K**: Focus input field
-- **Escape**: Clear input field
-
-## 🛠️ Technical Details
-
-### Built With
-
-- **Frontend**: Vanilla HTML5, CSS3, JavaScript (ES6+)
-- **Styling**: Custom CSS with CSS Variables for theming
-- **Icons**: Font Awesome 6.0.0
-- **API**: Integration with TikTok video processing services
-- **Storage**: Local Storage for history and preferences
-
-### Browser Compatibility
-
-- ✅ Chrome 60+
-- ✅ Firefox 55+
-- ✅ Safari 12+
-- ✅ Edge 79+
-- ✅ Mobile browsers (iOS Safari, Chrome Mobile)
-
-### Features Implementation
-
-- **Theme System**: CSS custom properties with localStorage persistence
-- **Responsive Grid**: CSS Grid and Flexbox for modern layouts
-- **Progressive Enhancement**: Works without JavaScript for basic functionality
-- **Accessibility**: ARIA labels, keyboard navigation, screen reader support
-- **Performance**: Optimized animations, lazy loading, efficient DOM manipulation
+- **UI Engine**: Vanilla HTML5/CSS3 with Custom Obsidian Variable Tokens.
+- **Typography**: **Outfit** (Google Fonts) for modern, high-density legibility.
+- **Iconography**: Font Awesome 6 Pro-style integration.
+- **Logic**: ES6+ Pure JavaScript for zero-latency DOM manipulation.
+- **Security**: 256-bit SSL encrypted stream retrieval.
+- **Optimization**: Mobile-first design with safe-area support and auto-zoom prevention.
 
 ## 📁 Project Structure
 
 ```
-TikTok Downloader/
-├── index.html          # Main application file
-├── README.md           # Project documentation
-└── assets/             # (Optional) For future assets
+TikiSave/
+├── index.html          # Core High-Fidelity Application
+└── README.md           # Documentation
 ```
 
-## 🔧 Installation & Setup
+## 🔧 Deployment & Use
 
-### Option 1: Direct Use
+### Direct Protocol
+Simply download `index.html` and open it in any modern browser. No build steps or dependencies required.
 
-1. Download the `index.html` file
-2. Open it in any modern web browser
-3. Start downloading TikTok videos immediately
-
-### Option 2: Local Server (Recommended for Development)
-
-1. Clone or download the project files
-2. Open a terminal in the project directory
-3. Start a local HTTP server:
-
+### Local Development
+To run in a local environment:
 ```bash
-# Using Python 3
+# Using Python
 python -m http.server 8000
 
-# Using Node.js (if you have http-server installed)
+# Using Node.js
 npx http-server
-
-# Using PHP
-php -S localhost:8000
 ```
 
-4. Open `http://localhost:8000` in your browser
+## 📄 Transparency & Legal
 
-### Option 3: Deploy to Web Server
+### Security Protocol
+TikiSave operates on a **Zero-Retention Policy**. All media is retrieved directly from official Content Delivery Networks (CDNs) and is never proxied, re-encoded, or stored on our infrastructure.
 
-1. Upload `index.html` to your web hosting service
-2. Ensure your server supports static file hosting
-3. Access via your domain name
-
-## 🌟 Key Features Explained
-
-### Download History
-
-- Automatically saves download information
-- Stores up to 20 recent downloads
-- Includes video metadata (author, title, date)
-- Quick re-download buttons for previous content
-
-### Statistics Tracking
-
-- Total downloads counter
-- Daily download tracking
-- Success rate calculation
-- Automatic daily reset
-
-### Social Sharing
-
-- Built-in social media sharing buttons
-- Support for Facebook, Twitter, WhatsApp, LinkedIn, and Pinterest
-- Custom sharing messages for each platform
-
-### FAQ System
-
-- Expandable question-answer interface
-- Covers common user questions
-- State persistence across sessions
-
-## 🔒 Privacy & Legal
-
-### Privacy Features
-
-- No user registration required
-- No personal data collection
-- All processing happens client-side
-- Download history stored locally only
-
-### Legal Disclaimer
-
-⚠️ **Important**: This tool is for educational and personal use only. Please respect:
-
-- Copyright laws in your jurisdiction
-- TikTok's Terms of Service
-- Content creators' rights
-- Fair use principles
-
-The developers are not responsible for any misuse of this tool.
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**"Could not fetch video" Error**
-
-- Check if the TikTok link is valid and accessible
-- Ensure the video hasn't been deleted or made private
-- Try refreshing the page and attempting again
-
-**Download Not Starting**
-
-- Check your browser's download settings
-- Ensure pop-up blockers are disabled for this site
-- Verify you have sufficient storage space
-
-**Batch Processing Issues**
-
-- Ensure each link is on a separate line
-- Check that all links are valid TikTok URLs
-- Wait for each download to complete before starting the next
-
-### Browser-Specific Issues
-
-**Chrome/Edge**: Should work without issues
-**Firefox**: May require allowing pop-ups
-**Safari**: Ensure JavaScript is enabled
-**Mobile**: Use landscape mode for better experience
-
-## 🤝 Contributing
-
-While this is a single-file application, contributions are welcome:
-
-1. Fork the project
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly across different browsers
-5. Submit a pull request
-
-### Development Guidelines
-
-- Maintain vanilla JavaScript (no frameworks)
-- Ensure cross-browser compatibility
-- Follow existing code style and structure
-- Test on multiple devices and screen sizes
-
-## 📈 Future Enhancements
-
-Potential features for future versions:
-
-- [ ] Video quality selection options
-- [ ] Download queue management
-- [ ] Cloud storage integration
-- [ ] Advanced video editing tools
-- [ ] Multi-language support
-- [ ] PWA (Progressive Web App) capabilities
-
-## 📞 Support
-
-For support or questions:
-
-- Check the FAQ section in the application
-- Review the troubleshooting guide above
-- Ensure you're using a supported browser
-- Try clearing browser cache and cookies
-
-## 📄 License
-
-This project is provided as-is for educational and personal use. Please ensure compliance with all applicable laws and terms of service when using this tool.
-
-## 🙏 Acknowledgments
-
-- Built with modern web technologies
-- Inspired by the need for accessible content tools
-- Designed with user experience and privacy in mind
+### Ethical Usage
+⚠️ **Disclaimer**: TikiSave is designed for personal curation and educational purposes. We respect the intellectual property of creators and the TikTok Terms of Service. Users are responsible for ensuring their use of downloaded media complies with local laws and fair use principles.
 
 ---
 
-**Last Updated**: August 2025  
-**Version**: 1.0.0  
-**Browser Support**: Modern browsers with ES6+ support
+**Current Status**: Live v1.02-Obsidian  
+**Branding**: TikiSave (formerly Obsidian Stream)  
+**Maintained by**: [Bryt19](https://github.com/Bryt19)  
+**Last Sync**: April 2026
