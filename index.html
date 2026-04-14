@@ -1072,7 +1072,7 @@
                 showToast("Network error. Try again.", "error");
             } finally {
                 dlBtn.disabled = false;
-                dlBtn.innerHTML = '<span>Download</span> <i class="fa-solid fa-arrow-down"></i>';
+                dlBtn.innerHTML = '<span>Fetch</span> <i class="fa-solid fa-arrow-down"></i>';
             }
         });
 
@@ -1111,7 +1111,7 @@
             urlInput.focus();
         };
 
-        async function processUrl(url, targetPage = 'result') {
+        async function downloadFile(url, name) {
             showToast("Starting download...", "success");
             
             try {
